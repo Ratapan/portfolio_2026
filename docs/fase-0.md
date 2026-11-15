@@ -72,6 +72,11 @@ Estado del DNS público (2026-11-15):
 
 Si prefieres no tocar el correo todavía, este bloque puede esperar hasta la fase 6, que es cuando se usa.
 
-## 6. GitHub + Workers Builds — en la fase 2
+## 6. GitHub + Vercel — al cierre de la fase 2
 
-El Worker necesita un proyecto que compilar, así que se conecta al final de la fase 2. Antes te pido OK para crear el repo `portfolio_2026` en GitHub.
+Cambio del 2026-11-15: el sitio se despliega en **Vercel**, no en Workers. portfolio_2025 ya vive allí y el dominio ya apunta a Vercel. El código se guarda en GitHub (`portfolio_2026`).
+
+1. Crea en GitHub el repo vacío `portfolio_2026`, sin README ni licencia, y yo subo el código.
+2. En Vercel: **Add New → Project → importa `portfolio_2026`**. Vercel detecta Astro: el build es `astro build` y la salida es `dist`.
+3. En **Settings → Environment Variables**, agrega `MONGODB_URI` con la URI de `portfolio_build` (solo lectura).
+4. El dominio no se toca hasta la fase 7: por ahora queda en la URL `*.vercel.app`.

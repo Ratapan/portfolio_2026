@@ -6,7 +6,7 @@
 import { MongoClient, type Db } from "mongodb";
 
 function mongoUri(): string {
-  // .env en local (import.meta.env); variable del entorno en Workers Builds.
+  // .env en local (import.meta.env); variable de entorno del build en Vercel.
   const uri = import.meta.env.MONGODB_URI || process.env.MONGODB_URI;
   if (!uri) {
     throw new Error(

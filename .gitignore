@@ -1,7 +1,7 @@
 # build
 dist/
 .astro/
-.wrangler/
+.vercel/
 
 # dependencias
 node_modules/

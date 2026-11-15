@@ -10,6 +10,8 @@ import { defineCollection } from "astro:content";
 import type { Loader } from "astro/loaders";
 import { z } from "astro/zod";
 import { dropNulls, withDb } from "./lib/mongo";
+import { barePhoto, normalizePost, rawToPhoto, referencedUrls } from "./lib/posts-normalize";
+import { cameraName } from "./lib/gear";
 
 const trimmed = z.string().trim();
 
@@ -111,7 +113,57 @@ const tagsLoader: Loader = {
   },
 };
 
+/**
+ * Artículos (type "blog") y proyectos (type "repo") publicados. Las fotos que
+ * citan se enriquecen con su doc de `images` AUNQUE tenga visible:false: estar
+ * en un artículo publicado ya es publicarla (visible gobierna la galería).
+ * Se valida a mano en normalizePost (los docs legacy traen formas viejas), así
+ * que la colección no lleva schema de Zod.
+ */
+function postsLoader(type: "blog" | "repo"): Loader {
+  return {
+    name: `mongo-posts-${type}`,
+    async load({ store, logger }) {
+      const { docs, photos } = await withDb(async (db) => {
+        // Los docs viejos sin `type` son blogs (default del modelo Mongoose).
+        const typeFilter = type === "blog" ? { $in: ["blog", null] } : "repo";
+        const docs = await db
+          .collection("blogs")
+          .find({ status: "published", type: typeFilter }, { projection: { __v: 0 } })
+          .toArray();
+        const urls = [...new Set(docs.flatMap((d) => referencedUrls(d)))];
+        const photos = urls.length
+          ? await db
+              .collection("images")
+              .find({ url: { $in: urls } }, { projection: { originalKey: 0, stars: 0, __v: 0 } })
+              .toArray()
+          : [];
+        return { docs, photos };
+      });
+
+      const byUrl = new Map(photos.map((p) => [String(p.url), rawToPhoto(p, cameraName)]));
+      const photoOf = (url: string) => byUrl.get(url) ?? barePhoto(url);
+      store.clear();
+      for (const doc of docs) {
+        const post = normalizePost(doc, photoOf, doc._id.getTimestamp());
+        if (!post.slug || !post.title) {
+          logger.warn(`post ${String(doc._id)} omitido: sin slug o título`);
+          continue;
+        }
+        store.set({ id: post.slug, data: post as unknown as Record<string, unknown> });
+      }
+      const missing = [...new Set(docs.flatMap((d) => referencedUrls(d)))].filter((u) => !byUrl.has(u));
+      logger.info(
+        `${docs.length} ${type === "blog" ? "artículos" : "proyectos"} publicados` +
+          (missing.length ? ` · ${missing.length} fotos sin doc en images` : ""),
+      );
+    },
+  };
+}
+
 export const collections = {
   photos: defineCollection({ loader: photosLoader, schema: photoSchema }),
   tags: defineCollection({ loader: tagsLoader, schema: tagSchema }),
+  articles: defineCollection({ loader: postsLoader("blog") }),
+  projects: defineCollection({ loader: postsLoader("repo") }),
 };

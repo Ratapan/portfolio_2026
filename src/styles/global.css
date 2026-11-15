@@ -178,4 +178,90 @@
       --row-h: 200px;
     }
   }
+  /* En artículos las galerías son cortas: filas más altas. */
+  .jrows.jrows-article {
+    --row-h: 160px;
+  }
+  @media (min-width: 1024px) {
+    .jrows.jrows-article {
+      --row-h: 260px;
+    }
+  }
+
+  /* Foto de ancho completo dentro de un contenedor centrado. */
+  .full-bleed {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  /* Texto de artículos (HTML sanitizado de los bloques text). */
+  .prose-rapics {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .prose-rapics > * + * {
+    margin-top: 1.1em;
+  }
+  .prose-rapics h2 {
+    margin-top: 1.8em;
+    font-size: 1.6rem;
+    line-height: 1.25;
+  }
+  .prose-rapics h3 {
+    margin-top: 1.5em;
+    font-size: 1.3rem;
+    line-height: 1.3;
+  }
+  .prose-rapics a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-rapics ul,
+  .prose-rapics ol {
+    padding-left: 1.4em;
+  }
+  .prose-rapics ul {
+    list-style: disc;
+  }
+  .prose-rapics ol {
+    list-style: decimal;
+  }
+  .prose-rapics li + li {
+    margin-top: 0.35em;
+  }
+  .prose-rapics blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1em;
+    color: var(--color-font2);
+    font-style: italic;
+  }
+  .prose-rapics code {
+    border-radius: 0.25rem;
+    background-color: var(--color-surface2);
+    padding: 0.1em 0.35em;
+    font-size: 0.9em;
+  }
+  .prose-rapics pre {
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    background-color: var(--color-surface);
+    padding: 1rem;
+  }
+  .prose-rapics pre code {
+    background: none;
+    padding: 0;
+  }
+
+  /* Bloques de código resaltados con Shiki (tema dual Gruvbox). */
+  .code-block pre {
+    overflow-x: auto;
+    padding: 1rem;
+  }
+  .light .code-block .shiki,
+  .light .code-block .shiki span {
+    color: var(--shiki-light) !important;
+    background-color: var(--shiki-light-bg) !important;
+  }
 }

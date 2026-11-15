@@ -13,16 +13,20 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/vue": "^7.1.6",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.12",
     "mongodb": "^7.9.0",
+    "sanitize-html": "^2.18.2",
+    "shiki": "^4.6.0",
     "tailwindcss": "^4.3.5",
     "vue": "^3.5.45"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@types/node": "^22.20.5",
+    "@types/sanitize-html": "^2.16.2",
     "typescript": "^6.0.3"
   },
   "packageManager": "pnpm@10.17.1"

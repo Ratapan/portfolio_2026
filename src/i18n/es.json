@@ -227,7 +227,18 @@
     "open": "Abrir foto: {alt}"
   },
   "article": {
-    "unsupported": "Tipo de contenido no soportado: {type}"
+    "unsupported": "Tipo de contenido no soportado: {type}",
+    "playVideo": "Reproducir video",
+    "minRead": "{n} min de lectura",
+    "tags": "Etiquetas",
+    "onlySpanish": "ES",
+    "onlySpanishNote": "En español",
+    "back": "Todos los artículos",
+    "listTitle": "Artículos",
+    "listSubtitle": "Las historias detrás de las fotos.",
+    "empty": "Aún no hay artículos publicados.",
+    "rss": "Suscribirse por RSS",
+    "metaDescription": "Artículos de Javier Sabando: viajes, salidas fotográficas y lo que hay detrás de cada sesión."
   },
   "image": {
     "metadata": {
@@ -256,5 +267,15 @@
     "arte urbano": "Arte urbano",
     "cultura y eventos": "Cultura y eventos",
     "historia": "Historia"
+  },
+  "projects": {
+    "listTitle": "Proyectos",
+    "listSubtitle": "Lo que construyo como desarrollador.",
+    "empty": "Aún no hay proyectos publicados.",
+    "back": "Todos los proyectos",
+    "github": "Código",
+    "demo": "Demo",
+    "technologies": "Tecnologías",
+    "metaDescription": "Proyectos de software de Javier Sabando."
   }
 }

@@ -1,6 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": true,
+  "redirects": [
+    { "source": "/about", "destination": "/sobre-mi/", "permanent": true },
+    { "source": "/about/", "destination": "/sobre-mi/", "permanent": true },
+    { "source": "/blog", "destination": "/articulos/", "permanent": true },
+    { "source": "/blog/", "destination": "/articulos/", "permanent": true },
+    { "source": "/blog/:slug", "destination": "/articulos/:slug/", "permanent": true },
+    { "source": "/blog/:slug/", "destination": "/articulos/:slug/", "permanent": true },
+    { "source": "/repo", "destination": "/proyectos/", "permanent": true },
+    { "source": "/repo/", "destination": "/proyectos/", "permanent": true },
+    { "source": "/repo/:slug", "destination": "/proyectos/:slug/", "permanent": true },
+    { "source": "/repo/:slug/", "destination": "/proyectos/:slug/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/_astro/(.*)",

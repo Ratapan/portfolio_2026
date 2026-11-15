@@ -1,0 +1,47 @@
+---
+// Filas justificadas estáticas (mismo CSS .jrows/.jitem que la galería). Cada
+// foto enlaza al WebP; con JS, el clic abre el visor (data-lb-index).
+import { cfImage, srcset } from "../../lib/img";
+import { captionOf, ratioOf, type GPhoto } from "../../lib/gallery-shared";
+import type { Locale } from "../../i18n";
+
+interface Props {
+  photos: GPhoto[];
+  locale: Locale;
+  /** Índice en el visor de la primera foto de esta fila. */
+  offset: number;
+  altFallback: string;
+}
+
+const { photos, locale, offset, altFallback } = Astro.props;
+// Altura base mayor que en la galería: aquí las filas son cortas (2–7 fotos).
+const sizesFor = (p: GPhoto) => {
+  const r = ratioOf(p);
+  return `(min-width: 1024px) min(${Math.round(260 * r * 1.5)}px, 1024px), min(${Math.round(160 * r * 1.5)}px, 100vw)`;
+};
+---
+
+<div class="jrows jrows-article">
+  {
+    photos.map((p, i) => (
+      <a
+        href={p.url}
+        class="jitem group relative block overflow-hidden rounded-md"
+        style={`--r:${ratioOf(p).toFixed(4)}${p.c ? `;background-color:${p.c}` : ""}`}
+        data-lb-index={offset + i}
+      >
+        <img
+          src={cfImage(p.url, 960)}
+          srcset={srcset(p.url, p.w)}
+          sizes={sizesFor(p)}
+          width={p.w}
+          height={p.h}
+          alt={captionOf(p, locale) || altFallback}
+          loading="lazy"
+          decoding="async"
+          class="block size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      </a>
+    ))
+  }
+</div>

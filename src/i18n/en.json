@@ -227,7 +227,18 @@
     "open": "Open photo: {alt}"
   },
   "article": {
-    "unsupported": "Unsupported content type: {type}"
+    "unsupported": "Unsupported content type: {type}",
+    "playVideo": "Play video",
+    "minRead": "{n} min read",
+    "tags": "Tags",
+    "onlySpanish": "ES",
+    "onlySpanishNote": "In Spanish",
+    "back": "All articles",
+    "listTitle": "Articles",
+    "listSubtitle": "The stories behind the photos. Articles are written in Spanish.",
+    "empty": "No articles published yet.",
+    "rss": "Subscribe via RSS",
+    "metaDescription": "Articles by Javier Sabando: trips, photo walks and the story behind each shoot (in Spanish)."
   },
   "image": {
     "metadata": {
@@ -256,5 +267,15 @@
     "arte urbano": "Street art",
     "cultura y eventos": "Culture & events",
     "historia": "History"
+  },
+  "projects": {
+    "listTitle": "Projects",
+    "listSubtitle": "What I build as a developer. Project pages are in Spanish.",
+    "empty": "No projects published yet.",
+    "back": "All projects",
+    "github": "Code",
+    "demo": "Demo",
+    "technologies": "Technologies",
+    "metaDescription": "Software projects by Javier Sabando."
   }
 }

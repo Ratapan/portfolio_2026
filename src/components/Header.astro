@@ -1,5 +1,6 @@
 ---
 import { NAV, ROUTES, t, type Locale, type RouteName } from "../i18n";
+import { getProjects } from "../lib/posts";
 
 interface Props {
   locale: Locale;
@@ -7,7 +8,10 @@ interface Props {
 }
 
 const { locale, current } = Astro.props;
-const items = NAV.filter((item) => item.ready);
+// Sin proyectos publicados, la sección no aparece en el menú (la página
+// existe igual, con su estado vacío).
+const hasProjects = (await getProjects()).length > 0;
+const items = NAV.filter((item) => item.ready && (item.route !== "projects" || hasProjects));
 ---
 
 <header class="border-b border-line/60">

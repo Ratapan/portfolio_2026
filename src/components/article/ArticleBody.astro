@@ -1,0 +1,192 @@
+---
+// Cuerpo de un artículo o proyecto: layout de ensayo fotográfico. El texto va
+// en una columna de ~680 px y las fotos pueden ser más anchas (size del
+// bloque: normal / ancho / completo). Las galerías (slide) van en filas
+// justificadas. Todo es HTML estático: el visor (Vue) se descarga recién con
+// el primer clic en una foto.
+import { bundledLanguages, codeToHtml } from "shiki";
+import JustifiedRows from "./JustifiedRows.astro";
+import { cfImage, srcset } from "../../lib/img";
+import { captionOf, footerOf, type GPhoto } from "../../lib/gallery-shared";
+import type { PostBlock } from "../../lib/posts";
+import { lightboxUi } from "../../lib/ui";
+import { t, type Locale } from "../../i18n";
+
+interface Props {
+  blocks: PostBlock[];
+  locale: Locale;
+}
+
+const { blocks, locale } = Astro.props;
+const altFallback = t(locale, "photo.altFallback");
+
+// Índice global de cada foto en el visor (en el orden del artículo).
+const photos: GPhoto[] = [];
+const rendered = await Promise.all(
+  blocks.map(async (block) => {
+    if (block.type === "image") {
+      photos.push(block.photo);
+      return { block, offset: photos.length - 1 };
+    }
+    if (block.type === "slide") {
+      const offset = photos.length;
+      photos.push(...block.photos);
+      return { block, offset };
+    }
+    if (block.type === "code") {
+      const lang = block.language && block.language in bundledLanguages ? block.language : "text";
+      const html = await codeToHtml(block.code, {
+        lang,
+        themes: { light: "gruvbox-light-medium", dark: "gruvbox-dark-medium" },
+        defaultColor: "dark",
+      });
+      return { block, offset: -1, html };
+    }
+    return { block, offset: -1 };
+  }),
+);
+
+const IMAGE_WIDTH = { normal: "max-w-[680px]", ancho: "max-w-5xl", completo: "max-w-none" } as const;
+const MAX_WIDTH = { normal: "680px", ancho: "1024px", completo: "100vw" } as const;
+// Ancho mostrado = el menor entre el del tamaño, la ventana y lo que permite el
+// tope de alto (90vh) según la proporción de la foto.
+const sizesFor = (size: keyof typeof MAX_WIDTH, p: GPhoto) => {
+  const r = p.w && p.h ? p.w / p.h : 1.5;
+  const viewport = size === "completo" ? "100vw" : "calc(100vw - 32px)";
+  return `min(${MAX_WIDTH[size]}, ${viewport}, calc(90vh * ${r.toFixed(3)}))`;
+};
+
+const youtubeId = (src: string) => src.match(/youtube(?:-nocookie)?\.com\/embed\/([\w-]{6,})/)?.[1];
+// "<" escapado: el JSON va dentro de un <script> y no debe poder cerrarlo.
+const payload = JSON.stringify({ photos, locale, ui: lightboxUi(locale) }).replace(/</g, "\\u003c");
+---
+
+<div class="article-body space-y-8">
+  {
+    rendered.map(({ block, offset, html }) => {
+      if (block.type === "text") {
+        return <div class="prose-rapics mx-auto max-w-[680px]" set:html={block.html} />;
+      }
+      if (block.type === "image") {
+        const p = block.photo;
+        const text = [captionOf(p, locale), footerOf(p, locale)].filter(Boolean).join(" ");
+        return (
+          <figure class:list={["mx-auto", IMAGE_WIDTH[block.size], block.size === "completo" && "full-bleed"]}>
+            <a href={p.url} data-lb-index={offset} class="block">
+              <img
+                src={cfImage(p.url, 1600)}
+                srcset={srcset(p.url, p.w)}
+                sizes={sizesFor(block.size, p)}
+                width={p.w}
+                height={p.h}
+                alt={captionOf(p, locale) || altFallback}
+                loading="lazy"
+                decoding="async"
+                class:list={[
+                  "mx-auto block",
+                  block.size !== "completo" && "rounded-lg",
+                  // Las verticales quedan limitadas por el alto de la ventana.
+                  p.w ? "h-auto max-h-[90vh] w-auto max-w-full" : "aspect-[3/2] w-full object-cover",
+                ]}
+                style={p.c ? `background-color:${p.c}` : undefined}
+              />
+            </a>
+            {text && <figcaption class="mx-auto mt-2 max-w-[680px] px-4 text-center text-sm text-font2 sm:px-0">{text}</figcaption>}
+          </figure>
+        );
+      }
+      if (block.type === "slide") {
+        return (
+          <div class="mx-auto max-w-5xl">
+            <JustifiedRows photos={block.photos} locale={locale} offset={offset} altFallback={altFallback} />
+          </div>
+        );
+      }
+      if (block.type === "video") {
+        const id = youtubeId(block.src);
+        const embed = id ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1` : block.src;
+        const watch = id ? `https://www.youtube.com/watch?v=${id}` : block.src;
+        return (
+          <figure class="mx-auto max-w-5xl">
+            <a
+              href={watch}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-video-embed={embed}
+              class="group relative block aspect-video overflow-hidden rounded-lg bg-black"
+              aria-label={t(locale, "article.playVideo")}
+            >
+              {id && (
+                <img
+                  src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+                  alt=""
+                  width="480"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                  class="size-full object-cover opacity-80 transition-opacity group-hover:opacity-100"
+                />
+              )}
+              <span class="absolute inset-0 grid place-items-center">
+                <span class="grid size-16 place-items-center rounded-full bg-black/60 text-white transition-transform group-hover:scale-110">
+                  <svg viewBox="0 0 24 24" class="ml-1 size-8" aria-hidden="true">
+                    <path d="M8 5v14l11-7z" fill="currentColor" />
+                  </svg>
+                </span>
+              </span>
+            </a>
+            {block.caption && <figcaption class="mt-2 text-center text-sm text-font2">{block.caption}</figcaption>}
+          </figure>
+        );
+      }
+      if (block.type === "code") {
+        return <div class="code-block mx-auto max-w-[680px] overflow-hidden rounded-lg text-sm" set:html={html} />;
+      }
+      if (block.type === "file") {
+        return (
+          <p class="mx-auto max-w-[680px]">
+            <a href={block.url} class="btn" download>
+              ⬇ {block.name}
+              {block.fileType && <span class="text-xs uppercase opacity-70">{block.fileType}</span>}
+            </a>
+          </p>
+        );
+      }
+      return null;
+    })
+  }
+</div>
+
+{photos.length > 0 && <script type="application/json" id="lightbox-data" set:html={payload} />}
+
+<script>
+  // Fachada de video: el iframe de YouTube se crea recién al hacer clic.
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target || event.defaultPrevented) return;
+    const video = target.closest<HTMLAnchorElement>("[data-video-embed]");
+    if (video) {
+      event.preventDefault();
+      const iframe = document.createElement("iframe");
+      iframe.src = video.dataset.videoEmbed ?? "";
+      iframe.title = video.getAttribute("aria-label") ?? "Video";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      iframe.className = "aspect-video w-full rounded-lg";
+      video.replaceWith(iframe);
+      return;
+    }
+
+    // Foto: abre el visor (Vue se descarga ahora, no al cargar la página).
+    const link = target.closest<HTMLAnchorElement>("[data-lb-index]");
+    if (!link) return;
+    const mouse = event as MouseEvent;
+    if (mouse.ctrlKey || mouse.metaKey || mouse.shiftKey || mouse.button !== 0) return;
+    const data = document.getElementById("lightbox-data")?.textContent;
+    if (!data) return;
+    event.preventDefault();
+    import("../../lib/lightbox-client").then(({ openLightbox }) =>
+      openLightbox(JSON.parse(data), Number(link.dataset.lbIndex), link),
+    );
+  });
+</script>

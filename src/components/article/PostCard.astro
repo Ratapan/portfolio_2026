@@ -1,0 +1,62 @@
+---
+// Tarjeta de un artículo o proyecto en los listados.
+import { cfImage, srcset } from "../../lib/img";
+import { formatDate, type PostData } from "../../lib/posts";
+import { t, type Locale } from "../../i18n";
+
+interface Props {
+  post: PostData;
+  href: string;
+  locale: Locale;
+  /** Listado en inglés de contenido que solo existe en español. */
+  spanishBadge?: boolean;
+  priority?: boolean;
+}
+
+const { post, href, locale, spanishBadge = false, priority = false } = Astro.props;
+const cover = post.cover;
+---
+
+<article class="group relative flex flex-col overflow-hidden rounded-xl bg-surface">
+  <div class="aspect-[3/2] overflow-hidden" style={cover.c ? `background-color:${cover.c}` : undefined}>
+    <img
+      src={cfImage(cover.url, 960)}
+      srcset={srcset(cover.url, cover.w)}
+      sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+      width={cover.w}
+      height={cover.h}
+      alt=""
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      class="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+    />
+  </div>
+  <div class="flex flex-1 flex-col gap-2 p-4">
+    <p class="flex flex-wrap items-center gap-x-2 text-xs text-font2">
+      <time datetime={post.publishedAt.toISOString()}>{formatDate(post.publishedAt, locale)}</time>
+      {post.type === "blog" && <span>· {t(locale, "article.minRead", { n: post.readingMinutes })}</span>}
+      {
+        spanishBadge && (
+          <span class="rounded bg-back2 px-1.5 py-0.5 font-medium text-font1" title={t(locale, "article.onlySpanishNote")}>
+            {t(locale, "article.onlySpanish")}
+          </span>
+        )
+      }
+    </p>
+    <h2 class="text-xl leading-snug font-bold">
+      <a href={href} hreflang={spanishBadge ? "es" : undefined} class="after:absolute after:inset-0 hover:text-accent">
+        {post.title}
+      </a>
+    </h2>
+    <p class="line-clamp-3 text-sm text-font2">{post.excerpt}</p>
+    {
+      post.technologies.length > 0 && (
+        <ul class="mt-auto flex flex-wrap gap-1.5 pt-2 text-xs">
+          {post.technologies.map((tech) => (
+            <li class="rounded-full border border-line px-2 py-0.5 text-font2">{tech}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>

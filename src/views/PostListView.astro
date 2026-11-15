@@ -1,0 +1,61 @@
+---
+// Listado de artículos o proyectos. El contenido existe solo en español: en
+// /en/ se listan igual, con un badge "ES" y enlazando a la página en español.
+import Base from "../layouts/Base.astro";
+import PostCard from "../components/article/PostCard.astro";
+import { ROUTES, t, type Locale } from "../i18n";
+import { getArticles, getProjects } from "../lib/posts";
+import { cfImage } from "../lib/img";
+
+interface Props {
+  locale: Locale;
+  kind: "articles" | "projects";
+}
+
+const { locale, kind } = Astro.props;
+const posts = kind === "articles" ? await getArticles() : await getProjects();
+const ns = kind === "articles" ? "article" : "projects";
+const detailBase = ROUTES[kind].es;
+---
+
+<Base
+  locale={locale}
+  route={kind}
+  title={t(locale, `${ns}.listTitle`)}
+  description={t(locale, `${ns}.metaDescription`)}
+  image={posts[0] ? cfImage(posts[0].cover.url, 1600) : undefined}
+>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <header class="mb-8 space-y-2 text-center">
+      <h1 class="text-3xl font-bold md:text-4xl">{t(locale, `${ns}.listTitle`)}</h1>
+      <p class="text-font2">{t(locale, `${ns}.listSubtitle`)}</p>
+      {
+        kind === "articles" && (
+          <p class="text-xs">
+            <a href="/rss.xml" class="link underline-offset-4 hover:underline">
+              {t(locale, "article.rss")}
+            </a>
+          </p>
+        )
+      }
+    </header>
+
+    {
+      posts.length === 0 ? (
+        <p class="py-20 text-center text-font2">{t(locale, `${ns}.empty`)}</p>
+      ) : (
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post, i) => (
+            <PostCard
+              post={post}
+              href={`${detailBase}${post.slug}/`}
+              locale={locale}
+              spanishBadge={locale !== "es"}
+              priority={i < 3}
+            />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Base>

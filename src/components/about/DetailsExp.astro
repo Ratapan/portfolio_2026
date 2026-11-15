@@ -1,0 +1,45 @@
+---
+// Una experiencia laboral como <details> nativo. Con el mismo `name`, el
+// navegador deja abierta solo una a la vez (acordeón sin JS).
+interface Props {
+  name: string;
+  open?: boolean;
+  company: string;
+  position: string;
+  dates: string;
+  /** Logros separados por ";" (formato heredado de los textos de 2025). */
+  content: string;
+  skillsTitle: string;
+  skills: string;
+}
+
+const { name, open = false, company, position, dates, content, skillsTitle, skills } = Astro.props;
+const points = content
+  .split(";")
+  .map((s) => s.trim())
+  .filter(Boolean);
+---
+
+<details name={name} open={open} class="group">
+  <summary
+    class="flex cursor-pointer list-none items-baseline gap-2 rounded-lg py-2 select-none [&::-webkit-details-marker]:hidden"
+  >
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      class="size-4 shrink-0 self-center text-font2 transition-transform duration-200 group-open:rotate-90"
+    >
+      <path d="M7 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <h4 class="text-lg font-semibold">{company}</h4>
+    <span class="text-font2">· {position}</span>
+  </summary>
+  <article class="mt-1 mb-3 grid gap-2 rounded-xl bg-surface p-4 text-sm">
+    <p class="text-font2">{dates}</p>
+    <ul class="list-disc space-y-1 pl-5 marker:text-accent">
+      {points.map((point) => <li>{point}</li>)}
+    </ul>
+    <p class="mt-1 font-medium">{skillsTitle}</p>
+    <p class="text-font2">{skills}</p>
+  </article>
+</details>

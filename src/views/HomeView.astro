@@ -1,0 +1,64 @@
+---
+// Home provisoria de la fase 2: presentación + destacadas. La home definitiva
+// (colecciones, artículos, proyectos, CTA a encargos) llega en la fase 6.
+import Base from "../layouts/Base.astro";
+import Photo from "../components/Photo.astro";
+import { ROUTES, t, type Locale } from "../i18n";
+import { getFeatured, isLandscape } from "../lib/photos";
+import { cfImage, srcset } from "../lib/img";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const featured = await getFeatured();
+// Hero: la mejor foto horizontal (si no hay, la mejor a secas).
+const hero = featured.find(isLandscape) ?? featured[0];
+const grid = featured.filter((p) => p !== hero).slice(0, 9);
+const heroSizes = "(min-width: 1152px) 640px, (min-width: 768px) 55vw, 100vw";
+---
+
+<Base
+  locale={locale}
+  route="home"
+  image={hero ? cfImage(hero.url, 1600) : undefined}
+  preloadImage={hero ? { src: cfImage(hero.url, 960), srcset: srcset(hero.url, hero.width), sizes: heroSizes } : undefined}
+>
+  <div class="mx-auto max-w-6xl space-y-16 px-4 py-8">
+    <section class="grid items-center gap-8 md:grid-cols-[1fr_1.2fr]">
+      <div class="space-y-4">
+        <p class="text-font2">{t(locale, "home.hero.greeting")}</p>
+        <h1 class="text-4xl font-bold sm:text-5xl">Javier Sabando</h1>
+        <p class="flex flex-wrap gap-2 text-sm">
+          <span class="rounded-full bg-surface px-3 py-1">{t(locale, "home.hero.rolePhoto")}</span>
+          <span class="rounded-full bg-surface px-3 py-1">{t(locale, "home.hero.roleDev")}</span>
+        </p>
+        <p class="max-w-prose leading-relaxed text-font2">{t(locale, "home.hero.bio")}</p>
+        <a href={ROUTES.about[locale]} class="btn">{t(locale, "home.hero.ctaAbout")} →</a>
+      </div>
+      {hero && <Photo photo={hero} locale={locale} sizes={heroSizes} priority class="w-full rounded-2xl" />}
+    </section>
+
+    {
+      grid.length > 0 && (
+        <section>
+          <header class="mb-6">
+            <h2 class="text-2xl font-bold">{t(locale, "home.featured")}</h2>
+            <p class="text-font2">{t(locale, "home.featuredSubtitle")}</p>
+          </header>
+          <div class="columns-2 gap-3 md:columns-3 [&>*]:mb-3">
+            {grid.map((photo) => (
+              <Photo
+                photo={photo}
+                locale={locale}
+                sizes="(min-width: 1152px) 370px, (min-width: 768px) 32vw, 48vw"
+                class="w-full break-inside-avoid rounded-lg"
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Base>

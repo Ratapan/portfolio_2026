@@ -1,0 +1,89 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { ROUTES, t, type Locale, type RouteName } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  /** Sección actual: define el título por defecto, el enlace activo y los hreflang. */
+  route: RouteName;
+  title?: string;
+  description?: string;
+  /** Imagen para OG/Twitter (URL absoluta). */
+  image?: string;
+  /** URLs de precarga extra (p. ej. la foto LCP). */
+  preloadImage?: { src: string; srcset?: string; sizes?: string };
+}
+
+const { locale, route, title, description, image, preloadImage } = Astro.props;
+const siteName = t(locale, "meta.siteName");
+const fullTitle = title ? `${title} · ${siteName}` : `${siteName} · Javier Sabando`;
+const desc = description ?? t(locale, "meta.description");
+const site = Astro.site ?? new URL("https://javiersabando.lat");
+const canonical = new URL(ROUTES[route][locale], site).href;
+const alternates = (["es", "en"] as const).map((l) => ({
+  hreflang: l,
+  href: new URL(ROUTES[route][l], site).href,
+}));
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#282828" />
+
+    <!-- Tema antes de pintar: sin parpadeo en modo claro. -->
+    <script is:inline>
+      try {
+        if (localStorage.getItem("theme") === "light") document.documentElement.classList.add("light");
+      } catch (e) {}
+    </script>
+
+    <link rel="preload" href="/fonts/Montserrat-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/OpenSerif-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    {
+      preloadImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={preloadImage.src}
+          imagesrcset={preloadImage.srcset}
+          imagesizes={preloadImage.sizes}
+          fetchpriority="high"
+        />
+      )
+    }
+    <link rel="preconnect" href="https://assets.javiersabando.lat" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === "es" ? "es_CL" : "en_US"} />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+  </head>
+  <body class="flex min-h-dvh flex-col bg-back1 text-font1 antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-accent focus:px-3 focus:py-2 focus:text-back1"
+    >
+      {t(locale, "ui.skip")}
+    </a>
+    <Header locale={locale} current={route} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} route={route} />
+  </body>
+</html>

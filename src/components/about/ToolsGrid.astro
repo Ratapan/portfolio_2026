@@ -1,0 +1,40 @@
+---
+import { t, type Locale } from "../../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const iconBase = "https://assets.javiersabando.lat/coffeIcons";
+
+const categories = [
+  { key: "backend", tools: ["django", "express", "graphql", "mongo", "gcp"] },
+  { key: "frontend", tools: ["js", "html", "flutter"] },
+  { key: "design", tools: ["adobeXd", "figma", "css"] },
+  { key: "other", tools: ["linux", "git", "github"] },
+];
+---
+
+<div class="space-y-5">
+  {
+    categories.map((category) => (
+      <div>
+        <h4 class="pb-2 text-lg font-semibold">{t(locale, `tools.categories.${category.key}`)}</h4>
+        <ul class="flex flex-wrap items-center gap-5">
+          {category.tools.map((tool) => {
+            const label = t(locale, `tools.items.${tool}`);
+            return (
+              <li class="group relative" title={label}>
+                <img src={`${iconBase}/${tool}.svg`} alt={label} width="40" height="40" loading="lazy" class="h-10 w-auto" />
+                <span class="pointer-events-none absolute top-full left-1/2 mt-1 -translate-x-1/2 rounded bg-surface2 px-1.5 text-xs whitespace-nowrap opacity-0 transition-opacity group-hover:opacity-100">
+                  {label}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))
+  }
+</div>

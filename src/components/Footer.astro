@@ -1,0 +1,46 @@
+---
+import { ROUTES, otherLocale, t, type Locale, type RouteName } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  route: RouteName;
+}
+
+const { locale, route } = Astro.props;
+const other = otherLocale(locale);
+---
+
+<footer class="mt-12 bg-surface text-font2">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 text-xs">
+    <div class="flex items-center gap-4">
+      <a href={ROUTES[route][other]} hreflang={other} lang={other} class="link underline-offset-4 hover:underline">
+        {t(locale, "ui.otherLang")}
+      </a>
+      <button
+        type="button"
+        data-theme-toggle
+        class="link cursor-pointer"
+        aria-label={t(locale, "ui.themeToggle")}
+        title={t(locale, "ui.themeToggle")}
+      >
+        {`${t(locale, "ui.theme")}: `}<span class="light:hidden">{t(locale, "ui.themeDark")}</span>
+        <span class="hidden light:inline">{t(locale, "ui.themeLight")}</span>
+      </button>
+    </div>
+    <div class="text-end">
+      <p>{t(locale, "footer.owner")} · Chile</p>
+      <p>{t(locale, "footer.location")}</p>
+    </div>
+  </div>
+</footer>
+
+<script is:inline>
+  document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const light = document.documentElement.classList.toggle("light");
+      try {
+        localStorage.setItem("theme", light ? "light" : "dark");
+      } catch (e) {}
+    });
+  });
+</script>

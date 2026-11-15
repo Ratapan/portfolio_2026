@@ -1,0 +1,40 @@
+---
+// Foto responsive: srcset vía Transformations, tamaño reservado con
+// width/height (CLS ≈ 0) y el color promedio como placeholder mientras carga.
+// Las fotos sin dimensiones (no catalogadas) usan un 4:3 fijo con object-cover.
+import type { HTMLAttributes } from "astro/types";
+import { cfImage, srcset } from "../lib/img";
+import { altFor, type Photo } from "../lib/photos";
+import type { Locale } from "../i18n";
+
+interface Props extends Omit<HTMLAttributes<"img">, "src" | "srcset" | "alt" | "width" | "height"> {
+  photo: Photo;
+  locale: Locale;
+  /** Atributo sizes; por defecto la foto ocupa todo el ancho de la ventana. */
+  sizes?: string;
+  /** true = foto principal (LCP): carga inmediata y prioridad alta. */
+  priority?: boolean;
+  alt?: string;
+}
+
+const { photo, locale, sizes = "100vw", priority = false, alt, class: className, style, ...rest } =
+  Astro.props;
+
+const hasSize = !!photo.width && !!photo.height;
+const fallbackWidth = Math.min(photo.width ?? 960, 960);
+---
+
+<img
+  src={cfImage(photo.url, fallbackWidth)}
+  srcset={srcset(photo.url, photo.width)}
+  sizes={sizes}
+  width={photo.width}
+  height={photo.height}
+  alt={alt ?? altFor(photo, locale)}
+  loading={priority ? "eager" : "lazy"}
+  fetchpriority={priority ? "high" : undefined}
+  decoding={priority ? "sync" : "async"}
+  class:list={["block h-auto max-w-full", !hasSize && "aspect-[4/3] w-full object-cover", className]}
+  style={[photo.color && `background-color:${photo.color}`, style].filter(Boolean).join(";")}
+  {...rest}
+/>

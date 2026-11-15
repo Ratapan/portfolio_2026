@@ -1,0 +1,50 @@
+---
+// "Mi equipo": listas de barras (nombre, cifra y barra de proporción por fila).
+// Una sola serie por lista, así que un solo tono (--color-chart) y sin
+// leyenda; cada fila lleva su cifra escrita, de modo que nada depende del color.
+import { t, type Locale } from "../../i18n";
+import type { GearRow, GearStats } from "../../lib/gear";
+
+interface Props {
+  stats: GearStats;
+  locale: Locale;
+}
+
+const { stats, locale } = Astro.props;
+
+const groups: { key: string; rows: GearRow[] }[] = [
+  { key: "cameras", rows: stats.cameras },
+  { key: "lenses", rows: stats.lenses },
+  { key: "apertures", rows: stats.apertures },
+].filter((g) => g.rows.length > 0);
+
+const countLabel = (n: number) => (n === 1 ? t(locale, "gear.photo") : t(locale, "gear.photos", { n }));
+---
+
+<div>
+  <p class="mb-6 text-center text-font2">{t(locale, "gear.subtitle", { n: stats.total })}</p>
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      groups.map((group) => (
+        <section class="rounded-xl bg-surface p-4">
+          <h4 class="mb-3 text-lg font-semibold">{t(locale, `gear.${group.key}`)}</h4>
+          <ul class="space-y-3">
+            {group.rows.map((row) => (
+              <li title={`${row.label}: ${countLabel(row.count)} (${row.share} %)`}>
+                <div class="flex items-baseline justify-between gap-3 text-sm">
+                  <span class="min-w-0">{row.label}</span>
+                  <span class="shrink-0 text-font2 tabular-nums">
+                    {row.count} · {row.share} %
+                  </span>
+                </div>
+                <div class="mt-1.5 h-2 rounded-r bg-surface2" aria-hidden="true">
+                  <div class="h-full rounded-r bg-chart" style={`width:${Math.max(row.share, 1)}%`} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</div>

@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+/* Tema claro = clase .light en <html> (el script inline del <head> la pone
+   antes de pintar). Sin clase = oscuro, el tema por defecto. */
+@custom-variant light (&:where(.light, .light *));
+
+/* Paleta Gruvbox de portfolio_2025, definida UNA sola vez. Tailwind genera las
+   utilidades (bg-back1, text-font2, text-accent…) a partir de estas variables;
+   .light solo sobrescribe los valores. */
+@theme {
+  --color-back1: #282828;
+  --color-back2: #503720;
+  --color-font1: #fbf1c7;
+  --color-font2: #a89984;
+  --color-accent: #d3869b;
+
+  /* Superficies neutras: detrás de las fotos no va el café de back2. */
+  --color-surface: #32302f;
+  --color-surface2: #3c3836;
+  --color-line: #504945;
+
+  /* Barras de datos (Mi equipo). Validado con la skill dataviz contra
+     surface: #b16286 pasa en oscuro (#d3869b queda fuera de banda). */
+  --color-chart: #b16286;
+
+  --color-red: #fb4934;
+  --color-green: #b8bb26;
+  --color-yellow: #fabd2f;
+  --color-blue: #83a598;
+  --color-purple: #d3869b;
+  --color-aqua: #8ec07c;
+  --color-orange: #fe8019;
+
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Open Serif", ui-serif, Georgia, serif;
+}
+
+.light {
+  --color-back1: #fbf1c7;
+  --color-back2: #ffd08e;
+  --color-font1: #282828;
+  --color-font2: #503720;
+  --color-accent: #a6153c;
+
+  --color-surface: #f2e5bc;
+  --color-surface2: #ebdbb2;
+  --color-line: #d5c4a1;
+
+  --color-chart: #a6153c;
+}
+
+/* Fuentes servidas desde el mismo origen; swap = el texto nunca queda invisible. */
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Medium.woff2") format("woff2");
+  font-weight: 500 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Serif";
+  src: url("/fonts/OpenSerif-Regular.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  :root.light {
+    color-scheme: light;
+  }
+
+  html {
+    background-color: var(--color-back1);
+    color: var(--color-font1);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-back1);
+  }
+}
+
+@layer components {
+  .link {
+    color: var(--color-font2);
+    transition: color 150ms;
+  }
+  .link:hover,
+  .link[aria-current="page"] {
+    color: var(--color-accent);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--color-font2);
+    background-color: var(--color-back2);
+    transition:
+      color 150ms,
+      background-color 150ms;
+  }
+  .btn:hover {
+    color: var(--color-font1);
+    background-color: var(--color-accent);
+  }
+  .btn-accent {
+    color: var(--color-back1);
+    background-color: var(--color-accent);
+  }
+  .btn-accent:hover {
+    color: var(--color-back1);
+    filter: brightness(1.08);
+  }
+}

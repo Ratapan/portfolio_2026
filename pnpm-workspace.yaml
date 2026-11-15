@@ -1,0 +1,5 @@
+# pnpm 10.17: los deps nativos van en onlyBuiltDependencies (allowBuilds se ignora).
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd

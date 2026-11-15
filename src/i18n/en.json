@@ -1,0 +1,241 @@
+{
+  "nav": {
+    "home": "Home",
+    "portfolio": "Portfolio",
+    "collections": "Collections",
+    "articles": "Articles",
+    "projects": "Projects",
+    "about": "About",
+    "commissions": "Commissions",
+    "menu": "Menu"
+  },
+  "meta": {
+    "siteName": "Rapics",
+    "description": "Photography and software by Javier Sabando, from Santiago, Chile.",
+    "aboutTitle": "About",
+    "aboutDescription": "Javier Sabando: software engineer and photographer in Santiago, Chile. Experience, tools and the gear I shoot with."
+  },
+  "ui": {
+    "lang": "Language",
+    "otherLang": "Español",
+    "theme": "Theme",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "themeToggle": "Toggle light and dark theme",
+    "skip": "Skip to content"
+  },
+  "gear": {
+    "title": "My gear 📷",
+    "subtitle": "Computed from the {n} published photos.",
+    "cameras": "Cameras",
+    "lenses": "Lenses",
+    "focal": "Focal lengths",
+    "photos": "{n} photos",
+    "photo": "1 photo",
+    "share": "{p}% of photos",
+    "other": "Other",
+    "apertures": "Apertures",
+    "builtInLens": "Built-in lens",
+    "noData": "no data"
+  },
+  "home": {
+    "hero": {
+      "greeting": "Hi, I'm",
+      "roleDev": "Full Stack Dev",
+      "rolePhoto": "Photographer",
+      "bio": "Software engineer building web solutions, deploying to the cloud, and capturing the world through a lens — from Santiago, Chile.",
+      "ctaPortfolio": "View Portfolio",
+      "ctaAbout": "About me"
+    },
+    "slidersEyebrow": "Highlights",
+    "slidersTitle": "Latest Posts",
+    "slidersSubtitle": "A glimpse of recent stories.",
+    "loading": "Loading sliders...",
+    "viewPost": "View post",
+    "readMore": "Read more",
+    "untitled": "Untitled",
+    "featured": "Featured",
+    "featuredSubtitle": "A selection from the portfolio."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This page does not exist or has moved.",
+    "back": "Back to home"
+  },
+  "photo": {
+    "altFallback": "Photograph by Javier Sabando"
+  },
+  "common": {
+    "brand": "Rapics",
+    "minRead": "min read",
+    "noImage": "No image",
+    "backToPortfolio": "Back to Repos"
+  },
+  "header": {
+    "home": "Home",
+    "blog": "Blog",
+    "portfolio": "Portfolio",
+    "repo": "Repos",
+    "about": "About Javier",
+    "admin": "Admin"
+  },
+  "footer": {
+    "owner": "Javier Sabando",
+    "location": "Santiago - North area",
+    "date": "2000-07-28"
+  },
+  "about": {
+    "title": "Hello, I'm Javier Sabando",
+    "subtitle": "✨ A passionate software engineer from Chile ✨",
+    "sections": {
+      "toolsTitle": "Tools I Handle 🦾",
+      "toolsBackend": "Backend",
+      "toolsFrontend": "Frontend",
+      "toolsDesign": "Design",
+      "toolsOther": "Other",
+      "xpTitle": "Experience 🧐",
+      "searchMe": "Where Can You Find Me? 🔍"
+    },
+    "content": {
+      "aboutMe": "Computer Engineer and Full Stack Developer with experience in web development, cloud deployments, and process optimization. I work with Node.js, Vue.js, relational databases, and GCP, integrating Business Intelligence, automation, and AI into business-oriented solutions. Interested in product development and agile methodologies."
+    },
+    "xp": [
+      {
+        "company": "Carpetres",
+        "position": "Full Stack Developer",
+        "dates": "May 2024 - Present",
+        "content": "Development and maintenance of full-stack web solutions (Node.js/Express, Vue.js, PHP, PostgreSQL/MySQL).;Implementation of real-time applications (Vue.js, WebSockets) and landing pages.;Collaboration with clients on requirements gathering and technical support for internal applications.;Management of deployments, Nginx configuration, and database updates on Google Cloud Platform (GCP).",
+        "skillsTitle": "Skills used:",
+        "skills": "Node.js · Express · Vue.js · PHP · PostgreSQL · MySQL · WebSockets · GCP · Nginx"
+      },
+      {
+        "company": "Customware",
+        "position": "Software Engineer",
+        "dates": "2024 - Present",
+        "content": "Participate in requirements gathering for a web platform for a pharmacy/laboratory.;Collaborate with a team on platform development, focusing on quality control and drug batch analysis modules.",
+        "skillsTitle": "Skills used:",
+        "skills": "Requirements Analysis · Software Development · Quality Control Systems"
+      },
+      {
+        "company": "Tecnipro",
+        "position": "Developer and Consultant",
+        "dates": "2022 - Present",
+        "content": "Develop automated flows with Power Automate for managing communications based on Microsoft forms.;Create and maintain Power BI dashboards for monitoring courses and students.;Maintain and develop a full-stack chatbot integrated with OpenAI API.;Design and implement custom tools to optimize operational processes.",
+        "skillsTitle": "Skills used:",
+        "skills": "Power BI · Power Automate · OpenAI API · Process Optimization"
+      },
+      {
+        "company": "Carpetres",
+        "position": "Software Developer",
+        "dates": "October 2021 - September 2022",
+        "content": "Develop and maintain web applications using Vue.js for various companies, including Bboch and Sierra Gorda.;Create landing pages for clients like Copec, KCP, and LAN.;Participate in the initial development of an ERP-type web application, working closely with multidisciplinary teams.;Apply methodologies adapted from Scrum and Lean in the development process.",
+        "skillsTitle": "Skills used:",
+        "skills": "Vue.js · JavaScript · Scrum · Lean · Web Development"
+      }
+    ]
+  },
+  "tools": {
+    "categories": {
+      "backend": "Backend",
+      "frontend": "Frontend",
+      "design": "Design",
+      "other": "Other"
+    },
+    "items": {
+      "django": "Django",
+      "express": "Express",
+      "graphql": "GraphQL",
+      "mongo": "MongoDB",
+      "gcp": "Google Cloud",
+      "js": "JavaScript",
+      "html": "HTML",
+      "flutter": "Flutter",
+      "adobeXd": "Adobe XD",
+      "figma": "Figma",
+      "css": "CSS",
+      "git": "Git",
+      "github": "GitHub",
+      "linux": "Linux"
+    }
+  },
+  "blog": {
+    "pageTitle": "Blog",
+    "metaTitle": "Blog - Portfolio",
+    "metaDescription": "My thoughts and writings on technology and design.",
+    "search": "Search for an article...",
+    "empty": "No posts found.",
+    "readTime": "{minutes} min read",
+    "back": "Back to Repos",
+    "notFound": "Blog not found"
+  },
+  "repo": {
+    "metaTitle": "Portfolio - Projects & Blog",
+    "metaDescription": "Showcase of my projects and thoughts on technology.",
+    "tabs": {
+      "projects": "Projects",
+      "blogs": "Blogs"
+    },
+    "searchProjects": "Search projects...",
+    "searchPosts": "Search posts...",
+    "emptyProjects": "No projects found matching your search.",
+    "emptyPosts": "No posts found matching your search.",
+    "badges": {
+      "github": "GitHub",
+      "demo": "Demo",
+      "liveDemo": "Live Demo"
+    },
+    "back": "Back to Repos",
+    "notFound": "Repo not found"
+  },
+  "portfolio": {
+    "metaTitle": "Portfolio - Photography",
+    "metaDescription": "Professional photography by Javier Sabando, filterable by camera, lens, category and more.",
+    "title": "Portfolio",
+    "subtitle": "Professional photography",
+    "comingSoon": "The gallery is under construction. Soon you'll be able to browse and filter photos by category, camera, lens and more.",
+    "search": "Search the photos…",
+    "filters": "Filters",
+    "categories": "Categories",
+    "camera": "Camera",
+    "lens": "Lens",
+    "session": "Session",
+    "any": "All",
+    "featured": "Featured only",
+    "sort": "Sort",
+    "sortRecent": "Recent",
+    "sortStars": "Best",
+    "sortFocal": "Focal",
+    "advanced": "Advanced",
+    "iso": "ISO",
+    "aperture": "Aperture",
+    "min": "min",
+    "max": "max",
+    "clear": "Clear filters",
+    "results": "{n} photos",
+    "loading": "Loading photos…",
+    "loadMore": "Load more",
+    "empty": "No photos match these filters.",
+    "seeAll": "See all ({n})",
+    "seeLess": "See less",
+    "allOf": "All {group}",
+    "otherCats": "Other"
+  },
+  "article": {
+    "unsupported": "Unsupported content type: {type}"
+  },
+  "image": {
+    "metadata": {
+      "focal": "Focal",
+      "aperture": "Aperture",
+      "iso": "ISO",
+      "shutter": "Shutter",
+      "camera": "Camera",
+      "lens": "Lens"
+    }
+  },
+  "lightbox": {
+    "close": "Close",
+    "previous": "Previous",
+    "next": "Next"
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "portfolio": "Portafolio",
+    "collections": "Colecciones",
+    "articles": "Artículos",
+    "projects": "Proyectos",
+    "about": "Sobre mí",
+    "commissions": "Encargos",
+    "menu": "Menú"
+  },
+  "meta": {
+    "siteName": "Rapics",
+    "description": "Fotografía y desarrollo de Javier Sabando, desde Santiago de Chile.",
+    "aboutTitle": "Sobre mí",
+    "aboutDescription": "Javier Sabando: ingeniero de software y fotógrafo en Santiago de Chile. Experiencia, herramientas y el equipo con el que fotografío."
+  },
+  "ui": {
+    "lang": "Idioma",
+    "otherLang": "English",
+    "theme": "Tema",
+    "themeDark": "Oscuro",
+    "themeLight": "Claro",
+    "themeToggle": "Cambiar entre tema claro y oscuro",
+    "skip": "Saltar al contenido"
+  },
+  "gear": {
+    "title": "Mi equipo 📷",
+    "subtitle": "Calculado a partir de las {n} fotos publicadas.",
+    "cameras": "Cámaras",
+    "lenses": "Lentes",
+    "focal": "Distancias focales",
+    "photos": "{n} fotos",
+    "photo": "1 foto",
+    "share": "{p} % de las fotos",
+    "other": "Otras",
+    "apertures": "Aperturas",
+    "builtInLens": "Lente integrado",
+    "noData": "sin dato"
+  },
+  "home": {
+    "hero": {
+      "greeting": "Hola, soy",
+      "roleDev": "Full Stack Dev",
+      "rolePhoto": "Fotógrafo",
+      "bio": "Ingeniero Informático construyendo soluciones web, desplegando en la nube y capturando el mundo con una cámara — desde Santiago, Chile.",
+      "ctaPortfolio": "Ver Portafolio",
+      "ctaAbout": "Sobre mí"
+    },
+    "slidersEyebrow": "Destacados",
+    "slidersTitle": "Últimos Posts",
+    "slidersSubtitle": "Un vistazo a las historias recientes.",
+    "loading": "Cargando sliders...",
+    "viewPost": "Ver publicación",
+    "readMore": "Leer más",
+    "untitled": "Sin título",
+    "featured": "Destacadas",
+    "featuredSubtitle": "Una selección del portafolio."
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "text": "Esta página no existe o se movió.",
+    "back": "Volver al inicio"
+  },
+  "photo": {
+    "altFallback": "Fotografía de Javier Sabando"
+  },
+  "common": {
+    "brand": "Rapics",
+    "minRead": "min de lectura",
+    "noImage": "Sin imagen",
+    "backToPortfolio": "Volver a Repos"
+  },
+  "header": {
+    "home": "Inicio",
+    "blog": "Blog",
+    "portfolio": "Portafolio",
+    "repo": "Repos",
+    "about": "Sobre Javier",
+    "admin": "Admin"
+  },
+  "footer": {
+    "owner": "Javier Sabando",
+    "location": "Santiago - Sector Norte",
+    "date": "2000-07-28"
+  },
+  "about": {
+    "title": "Hola, soy Javier Sabando ",
+    "subtitle": "✨ Un apasionado ingeniero de software chileno ✨",
+    "sections": {
+      "toolsTitle": "Herramientas que uso 🦾",
+      "toolsBackend": "Backend",
+      "toolsFrontend": "Frontend",
+      "toolsDesign": "Diseño",
+      "toolsOther": "Otras",
+      "xpTitle": "Experiencia 🧐",
+      "searchMe": "¿Dónde me puedes buscar? 🔍"
+    },
+    "content": {
+      "aboutMe": "Ingeniero Informático y Full Stack Developer con experiencia en desarrollo web, despliegues en la nube y optimización de procesos. Trabajo con Node.js, Vue.js, bases de datos relacionales y GCP, integrando BI, automatización e IA en soluciones orientadas a negocio. Interesado en producto y metodologías ágiles."
+    },
+    "xp": [
+      {
+        "company": "Carpetres",
+        "position": "Full Stack Developer",
+        "dates": "Mayo 2024 - Presente",
+        "content": "Desarrollo y mantenimiento full-stack de soluciones web (Node.js/Express, Vue.js, PHP, PostgreSQL/MySQL). ;Implementación de aplicaciones en tiempo real (Vue.js, WebSockets) y landing pages. ;Colaboración con clientes en toma de requerimientos y soporte técnico de aplicaciones internas. ;Gestión de despliegues, configuración de Nginx y actualizaciones de BBDD en Google Cloud Platform (GCP).",
+        "skillsTitle": "Skills usadas:",
+        "skills": "Node.js · Express · Vue.js · PHP · PostgreSQL · MySQL · WebSockets · GCP · Nginx"
+      },
+      {
+        "company": "Customware",
+        "position": "Ingeniero de Software",
+        "dates": "2024 - Presente",
+        "content": "Participar en la toma de requerimientos para una plataforma web destinada a una farmacia/laboratorio. ;Colaborar junto a un equipo en el desarrollo de la plataforma, con enfoque en los módulos de control de calidad y análisis de lotes de medicamentos.",
+        "skillsTitle": "Skills usadas:",
+        "skills": "Análisis de Requerimientos · Desarrollo de Software · Sistemas de Control de Calidad"
+      },
+      {
+        "company": "Tecnipro",
+        "position": "Desarrollador y Consultor",
+        "dates": "2022 - Presente",
+        "content": "Desarrollar flujos automatizados con Power Automate para la gestión de comunicaciones basadas en formularios de Microsoft. ;Crear y mantener dashboards en Power BI para monitorización de cursos y estudiantes. ;Mantener y desarrollar un chatbot full stack integrado con la API de OpenAI. ;Diseñar e implementar herramientas personalizadas para optimizar procesos operativos.",
+        "skillsTitle": "Skills usadas:",
+        "skills": "Power BI · Power Automate · API de OpenAI · Optimización de Procesos"
+      },
+      {
+        "company": "Carpetres",
+        "position": "Desarrollador de Software",
+        "dates": "Octubre 2021 - Septiembre 2022",
+        "content": "Desarrollar y mantener aplicaciones web utilizando Vue.js para diversas empresas, incluyendo Bboch y Sierra Gorda. ;Crear landing pages para clientes como Copec, KCP y LAN. ;Participar en el desarrollo inicial de una aplicación web tipo ERP, colaborando estrechamente con equipos multidisciplinarios. ;Aplicar metodologías adaptadas de Scrum y Lean en el proceso de desarrollo.",
+        "skillsTitle": "Skills usadas:",
+        "skills": "Vue.js · JavaScript · Scrum · Lean · Desarrollo Web"
+      }
+    ]
+  },
+  "tools": {
+    "categories": {
+      "backend": "Backend",
+      "frontend": "Frontend",
+      "design": "Diseño",
+      "other": "Otras"
+    },
+    "items": {
+      "django": "Django",
+      "express": "Express",
+      "graphql": "GraphQL",
+      "mongo": "MongoDB",
+      "gcp": "Google Cloud",
+      "js": "JavaScript",
+      "html": "HTML",
+      "flutter": "Flutter",
+      "adobeXd": "Adobe XD",
+      "figma": "Figma",
+      "css": "CSS",
+      "git": "Git",
+      "github": "GitHub",
+      "linux": "Linux"
+    }
+  },
+  "blog": {
+    "pageTitle": "Blog",
+    "metaTitle": "Blog - Portafolio",
+    "metaDescription": "Mis pensamientos y escritos sobre tecnología y diseño.",
+    "search": "Busca un artículo ...",
+    "empty": "No hay publicaciones.",
+    "readTime": "{minutes} min de lectura",
+    "back": "Volver a Repos",
+    "notFound": "Blog no encontrado"
+  },
+  "repo": {
+    "metaTitle": "Portafolio - Proyectos y Blog",
+    "metaDescription": "Muestra de mis proyectos y pensamientos sobre tecnología.",
+    "tabs": {
+      "projects": "Proyectos",
+      "blogs": "Blogs"
+    },
+    "searchProjects": "Buscar proyectos...",
+    "searchPosts": "Buscar publicaciones...",
+    "emptyProjects": "No se encontraron proyectos para tu búsqueda.",
+    "emptyPosts": "No se encontraron publicaciones para tu búsqueda.",
+    "badges": {
+      "github": "GitHub",
+      "demo": "Demo",
+      "liveDemo": "Demo en vivo"
+    },
+    "back": "Volver a Repos",
+    "notFound": "Proyecto no encontrado"
+  },
+  "portfolio": {
+    "metaTitle": "Portafolio - Fotografía",
+    "metaDescription": "Fotografía profesional de Javier Sabando, filtrable por cámara, lente, categoría y más.",
+    "title": "Portafolio",
+    "subtitle": "Fotografía profesional",
+    "comingSoon": "La galería está en construcción. Pronto podrás explorar y filtrar las fotos por categoría, cámara, lente y más.",
+    "search": "Buscar en las fotos…",
+    "filters": "Filtros",
+    "categories": "Categorías",
+    "camera": "Cámara",
+    "lens": "Lente",
+    "session": "Sesión",
+    "any": "Todas",
+    "featured": "Solo destacadas",
+    "sort": "Orden",
+    "sortRecent": "Recientes",
+    "sortStars": "Mejores",
+    "sortFocal": "Focal",
+    "advanced": "Avanzado",
+    "iso": "ISO",
+    "aperture": "Apertura",
+    "min": "mín",
+    "max": "máx",
+    "clear": "Limpiar filtros",
+    "results": "{n} fotos",
+    "loading": "Cargando fotos…",
+    "loadMore": "Cargar más",
+    "empty": "No hay fotos que coincidan con estos filtros.",
+    "seeAll": "Ver todas ({n})",
+    "seeLess": "Ver menos",
+    "allOf": "Todo {group}",
+    "otherCats": "Otras"
+  },
+  "article": {
+    "unsupported": "Tipo de contenido no soportado: {type}"
+  },
+  "image": {
+    "metadata": {
+      "focal": "Focal",
+      "aperture": "Apertura",
+      "iso": "ISO",
+      "shutter": "Velocidad",
+      "camera": "Cámara",
+      "lens": "Lente"
+    }
+  },
+  "lightbox": {
+    "close": "Cerrar",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  }
+}

@@ -1,0 +1,20 @@
+# build
+dist/
+.astro/
+.wrangler/
+
+# dependencias
+node_modules/
+
+# logs
+*.log
+
+# variables de entorno (MONGODB_URI del build, de solo lectura, pero secreta)
+.env
+.env.*
+!.env.example
+.dev.vars*
+
+# sistema / editores
+.DS_Store
+.idea/

@@ -1,0 +1,18 @@
+---
+// Una página estática por categoría amplia (tag sin parent con fotos visibles).
+import type { GetStaticPaths } from "astro";
+import PortfolioView from "../../views/PortfolioView.astro";
+import { galleryFacets } from "../../lib/gallery";
+import type { CategoryGroup } from "../../lib/gallery-shared";
+
+export const getStaticPaths = (async () => {
+  const { categoryGroups } = await galleryFacets();
+  return categoryGroups
+    .filter((group) => group.parent)
+    .map((group) => ({ params: { categoria: group.slug }, props: { group } }));
+}) satisfies GetStaticPaths;
+
+const { group } = Astro.props as { group: CategoryGroup };
+---
+
+<PortfolioView locale="es" group={group} />

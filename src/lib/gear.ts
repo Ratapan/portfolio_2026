@@ -25,7 +25,7 @@ const CAMERA_NAMES: Record<string, string> = {
 const MISSING = new Set(["", "n/a", "na", "unknown", "-"]);
 const MAX_ROWS = 5;
 
-function cameraName(raw: string | undefined): string | undefined {
+export function cameraName(raw: string | undefined): string | undefined {
   const value = raw?.trim();
   if (!value || MISSING.has(value.toLowerCase())) return undefined;
   return CAMERA_NAMES[value] ?? value;

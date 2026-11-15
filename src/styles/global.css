@@ -147,4 +147,35 @@
     color: var(--color-back1);
     filter: brightness(1.08);
   }
+
+  /* Filas justificadas solo con CSS. Cada foto crece en proporción a su
+     aspect ratio (--r) desde una base de --row-h × --r, así todas las de una
+     fila terminan con la misma altura; el ::after con crecimiento enorme
+     evita que la última fila se estire. Sin JS de layout. */
+  .jrows {
+    --row-h: 140px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+  .jrows::after {
+    content: "";
+    flex-grow: 1000000;
+  }
+  .jrows > .jitem {
+    flex: calc(var(--r) * 1000) 1 calc(var(--r) * var(--row-h));
+    aspect-ratio: var(--r);
+    max-width: 100%;
+  }
+  @media (min-width: 768px) {
+    .jrows {
+      --row-h: 170px;
+      gap: 0.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .jrows {
+      --row-h: 200px;
+    }
+  }
 }

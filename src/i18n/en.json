@@ -191,7 +191,7 @@
     "metaTitle": "Portfolio - Photography",
     "metaDescription": "Professional photography by Javier Sabando, filterable by camera, lens, category and more.",
     "title": "Portfolio",
-    "subtitle": "Professional photography",
+    "subtitle": "Photography",
     "comingSoon": "The gallery is under construction. Soon you'll be able to browse and filter photos by category, camera, lens and more.",
     "search": "Search the photos…",
     "filters": "Filters",
@@ -218,7 +218,13 @@
     "seeAll": "See all ({n})",
     "seeLess": "See less",
     "allOf": "All {group}",
-    "otherCats": "Other"
+    "otherCats": "Other",
+    "info": "Info",
+    "allPortfolio": "Whole portfolio",
+    "browse": "Browse by category",
+    "categoryMeta": "{category} photography by Javier Sabando, from Santiago, Chile.",
+    "photoCount": "{n} photos",
+    "open": "Open photo: {alt}"
   },
   "article": {
     "unsupported": "Unsupported content type: {type}"
@@ -236,6 +242,19 @@
   "lightbox": {
     "close": "Close",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "dialog": "Photo viewer",
+    "info": "Photo details"
+  },
+  "categoryNames": {
+    "naturaleza": "Nature",
+    "paisaje": "Landscape",
+    "arquitectura": "Architecture",
+    "ciudad": "City",
+    "personas": "People",
+    "motor": "Motor",
+    "arte urbano": "Street art",
+    "cultura y eventos": "Culture & events",
+    "historia": "History"
   }
 }

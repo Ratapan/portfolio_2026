@@ -1,0 +1,115 @@
+---
+// Portafolio: la galería completa o, con `group`, la página de una categoría
+// amplia (/portafolio/arte-urbano/). Las primeras fotos van en el HTML; el
+// resto lo pinta la isla desde /data/photos.json.
+import Base from "../layouts/Base.astro";
+import GalleryExplorer from "../components/gallery/GalleryExplorer.vue";
+import { ROUTES, raw, t, type Locale } from "../i18n";
+import { galleryFacets, galleryPhotos, groupValues } from "../lib/gallery";
+import { applyFilters, emptyFilters, type CategoryGroup } from "../lib/gallery-shared";
+import { cfImage } from "../lib/img";
+
+interface Props {
+  locale: Locale;
+  group?: CategoryGroup;
+}
+
+const { locale, group } = Astro.props;
+const PAGE = 30;
+
+const facets = await galleryFacets();
+const scope = group ? groupValues(group) : undefined;
+const photos = applyFilters(await galleryPhotos(), emptyFilters(), scope);
+const initial = photos.slice(0, PAGE);
+
+const groupNames = (raw(locale, "categoryNames") as Record<string, string>) ?? {};
+const nameOf = (parent: string) => groupNames[parent] ?? parent.charAt(0).toUpperCase() + parent.slice(1);
+const portfolioPath = ROUTES.portfolio[locale];
+
+const p = (key: string) => t(locale, `portfolio.${key}`);
+// Solo los textos que usa la isla (no los diccionarios completos).
+const ui: Record<string, string> = {
+  ...Object.fromEntries(
+    [
+      "search", "filters", "categories", "camera", "lens", "session", "any", "featured", "sort",
+      "sortRecent", "sortStars", "sortFocal", "advanced", "iso", "aperture", "min", "max", "clear",
+      "results", "loadMore", "empty", "allOf", "otherCats", "info",
+    ].map((k) => [k, p(k)]),
+  ),
+  altFallback: t(locale, "photo.altFallback"),
+  lbDialog: t(locale, "lightbox.dialog"),
+  lbClose: t(locale, "lightbox.close"),
+  lbPrevious: t(locale, "lightbox.previous"),
+  lbNext: t(locale, "lightbox.next"),
+  lbInfo: t(locale, "lightbox.info"),
+  metaCamera: t(locale, "image.metadata.camera"),
+  metaLens: t(locale, "image.metadata.lens"),
+  metaFocal: t(locale, "image.metadata.focal"),
+  metaAperture: t(locale, "image.metadata.aperture"),
+  metaShutter: t(locale, "image.metadata.shutter"),
+};
+
+const title = group ? `${nameOf(group.parent)} · ${p("title")}` : p("title");
+const description = group
+  ? t(locale, "portfolio.categoryMeta", { category: nameOf(group.parent).toLowerCase() })
+  : p("metaDescription");
+const groupsWithPage = facets.categoryGroups.filter((g) => g.parent);
+const cover = initial[0];
+---
+
+<Base
+  locale={locale}
+  route="portfolio"
+  path={group ? `${group.slug}/` : undefined}
+  title={title}
+  description={description}
+  image={cover ? cfImage(cover.url, 1600) : undefined}
+>
+  <div class="mx-auto max-w-7xl px-4 py-8">
+    <header class="mb-6 space-y-1 text-center">
+      <p class="text-xs tracking-widest text-font2 uppercase">{p("subtitle")}</p>
+      <h1 class="text-3xl font-bold md:text-4xl">{group ? nameOf(group.parent) : p("title")}</h1>
+      {group && <p class="text-sm text-font2">{t(locale, "portfolio.photoCount", { n: photos.length })}</p>}
+    </header>
+
+    <nav aria-label={p("browse")} class="mb-8">
+      <ul class="flex flex-wrap justify-center gap-2 text-sm">
+        <li>
+          <a
+            href={portfolioPath}
+            class:list={["inline-block rounded-full border px-3 py-1 transition-colors", !group ? "border-accent bg-accent text-back1" : "border-line text-font2 hover:border-accent hover:text-font1"]}
+            aria-current={!group ? "page" : undefined}
+          >
+            {p("allPortfolio")}
+          </a>
+        </li>
+        {
+          groupsWithPage.map((g) => (
+            <li>
+              <a
+                href={`${portfolioPath}${g.slug}/`}
+                class:list={["inline-block rounded-full border px-3 py-1 transition-colors", group?.slug === g.slug ? "border-accent bg-accent text-back1" : "border-line text-font2 hover:border-accent hover:text-font1"]}
+                aria-current={group?.slug === g.slug ? "page" : undefined}
+              >
+                {nameOf(g.parent)} <span class="opacity-60">{g.count}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <GalleryExplorer
+      client:idle
+      locale={locale}
+      ui={ui}
+      groupNames={groupNames}
+      facets={facets}
+      initial={initial}
+      total={photos.length}
+      scope={scope}
+      dataUrl="/data/photos.json"
+      pageSize={PAGE}
+    />
+  </div>
+</Base>

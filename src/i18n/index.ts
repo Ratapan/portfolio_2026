@@ -55,7 +55,7 @@ export type RouteName = keyof typeof ROUTES;
  * activan en su fase para no enlazar a páginas que todavía dan 404.
  */
 export const NAV: { route: RouteName; ready: boolean; accent?: boolean }[] = [
-  { route: "portfolio", ready: false },
+  { route: "portfolio", ready: true },
   { route: "collections", ready: false },
   { route: "articles", ready: false },
   { route: "projects", ready: false },

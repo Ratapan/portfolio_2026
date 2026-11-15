@@ -35,7 +35,10 @@ const heroSizes = "(min-width: 1152px) 640px, (min-width: 768px) 55vw, 100vw";
           <span class="rounded-full bg-surface px-3 py-1">{t(locale, "home.hero.roleDev")}</span>
         </p>
         <p class="max-w-prose leading-relaxed text-font2">{t(locale, "home.hero.bio")}</p>
-        <a href={ROUTES.about[locale]} class="btn">{t(locale, "home.hero.ctaAbout")} →</a>
+        <div class="flex flex-wrap gap-3">
+          <a href={ROUTES.portfolio[locale]} class="btn btn-accent">{t(locale, "home.hero.ctaPortfolio")}</a>
+          <a href={ROUTES.about[locale]} class="btn">{t(locale, "home.hero.ctaAbout")} →</a>
+        </div>
       </div>
       {hero && <Photo photo={hero} locale={locale} sizes={heroSizes} priority class="w-full rounded-2xl" />}
     </section>

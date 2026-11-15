@@ -8,6 +8,8 @@ interface Props {
   locale: Locale;
   /** Sección actual: define el título por defecto, el enlace activo y los hreflang. */
   route: RouteName;
+  /** Subruta dentro de la sección (p. ej. "arte-urbano/"), igual en ambos idiomas. */
+  path?: string;
   title?: string;
   description?: string;
   /** Imagen para OG/Twitter (URL absoluta). */
@@ -16,15 +18,15 @@ interface Props {
   preloadImage?: { src: string; srcset?: string; sizes?: string };
 }
 
-const { locale, route, title, description, image, preloadImage } = Astro.props;
+const { locale, route, path = "", title, description, image, preloadImage } = Astro.props;
 const siteName = t(locale, "meta.siteName");
 const fullTitle = title ? `${title} · ${siteName}` : `${siteName} · Javier Sabando`;
 const desc = description ?? t(locale, "meta.description");
 const site = Astro.site ?? new URL("https://javiersabando.lat");
-const canonical = new URL(ROUTES[route][locale], site).href;
+const canonical = new URL(ROUTES[route][locale] + path, site).href;
 const alternates = (["es", "en"] as const).map((l) => ({
   hreflang: l,
-  href: new URL(ROUTES[route][l], site).href,
+  href: new URL(ROUTES[route][l] + path, site).href,
 }));
 ---
 
@@ -84,6 +86,6 @@ const alternates = (["es", "en"] as const).map((l) => ({
     <main id="main" class="flex-1">
       <slot />
     </main>
-    <Footer locale={locale} route={route} />
+    <Footer locale={locale} route={route} path={path} />
   </body>
 </html>

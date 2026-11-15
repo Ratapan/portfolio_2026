@@ -191,7 +191,7 @@
     "metaTitle": "Portafolio - Fotografía",
     "metaDescription": "Fotografía profesional de Javier Sabando, filtrable por cámara, lente, categoría y más.",
     "title": "Portafolio",
-    "subtitle": "Fotografía profesional",
+    "subtitle": "Fotografía",
     "comingSoon": "La galería está en construcción. Pronto podrás explorar y filtrar las fotos por categoría, cámara, lente y más.",
     "search": "Buscar en las fotos…",
     "filters": "Filtros",
@@ -218,7 +218,13 @@
     "seeAll": "Ver todas ({n})",
     "seeLess": "Ver menos",
     "allOf": "Todo {group}",
-    "otherCats": "Otras"
+    "otherCats": "Otras",
+    "info": "Información",
+    "allPortfolio": "Todo el portafolio",
+    "browse": "Explorar por categoría",
+    "categoryMeta": "Fotografías de {category} por Javier Sabando, desde Santiago de Chile.",
+    "photoCount": "{n} fotos",
+    "open": "Abrir foto: {alt}"
   },
   "article": {
     "unsupported": "Tipo de contenido no soportado: {type}"
@@ -236,6 +242,19 @@
   "lightbox": {
     "close": "Cerrar",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "dialog": "Visor de fotos",
+    "info": "Información de la foto"
+  },
+  "categoryNames": {
+    "naturaleza": "Naturaleza",
+    "paisaje": "Paisaje",
+    "arquitectura": "Arquitectura",
+    "ciudad": "Ciudad",
+    "personas": "Personas",
+    "motor": "Motor",
+    "arte urbano": "Arte urbano",
+    "cultura y eventos": "Cultura y eventos",
+    "historia": "Historia"
   }
 }

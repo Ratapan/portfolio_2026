@@ -80,3 +80,5 @@ Cambio del 2026-11-15: el sitio se despliega en **Vercel**, no en Workers. portf
 2. En Vercel: **Add New → Project → importa `portfolio_2026`**. Vercel detecta Astro: el build es `astro build` y la salida es `dist`.
 3. En **Settings → Environment Variables**, agrega `MONGODB_URI` con la URI de `portfolio_build` (solo lectura).
 4. El dominio no se toca hasta la fase 7: por ahora queda en la URL `*.vercel.app`.
+
+**Hecho** (2026-11-15): el código está en `Ratapan/portfolio_2026` (`main`) y el proyecto `portfolio-2026` se creó en Vercel con `MONGODB_URI` (sensitive). Ojo: `portfolio-2026.vercel.app` es de otra persona, así que la URL de prueba es otra.

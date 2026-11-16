@@ -114,6 +114,27 @@
 }
 
 @layer components {
+  *::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--color-back1);
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--color-back2);
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+
+
   .link {
     color: var(--color-font2);
     transition: color 150ms;

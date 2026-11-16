@@ -8,6 +8,7 @@ import { ROUTES, t, type Locale } from "../i18n";
 import { introLangOf, introOf, titleLangOf, titleOf, type CollectionData } from "../lib/collections";
 import type { PostBlock } from "../lib/posts";
 import { cfImage } from "../lib/img";
+import { collectionJsonLd } from "../lib/seo";
 
 interface Props {
   collection: CollectionData;
@@ -31,6 +32,7 @@ const blocks: PostBlock[] = collection.items.map((item) =>
   title={title}
   description={intro[0] ?? t(locale, "collections.metaDescription")}
   image={cfImage(collection.cover.url, 1600)}
+  jsonLd={collectionJsonLd(collection, locale)}
 >
   <article class="px-4 py-8">
     <header class="mx-auto mb-10 max-w-[680px] space-y-3 text-center">

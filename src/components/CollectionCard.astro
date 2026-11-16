@@ -1,0 +1,42 @@
+---
+// Tarjeta de una colección curada (listado de colecciones y home).
+import { ROUTES, t, type Locale } from "../i18n";
+import { introLangOf, introOf, titleLangOf, titleOf, type CollectionData } from "../lib/collections";
+import { cfImage, srcset } from "../lib/img";
+
+interface Props {
+  collection: CollectionData;
+  locale: Locale;
+  priority?: boolean;
+  /** Etiqueta del título: h2 en el listado, h3 dentro de una sección de la home. */
+  heading?: "h2" | "h3";
+}
+
+const { collection: c, locale, priority = false, heading: Heading = "h2" } = Astro.props;
+const intro = introOf(c, locale)[0];
+---
+
+<article class="group relative overflow-hidden rounded-xl bg-surface">
+  <div class="aspect-[3/2] overflow-hidden" style={c.cover.c ? `background-color:${c.cover.c}` : undefined}>
+    <img
+      src={cfImage(c.cover.url, 960)}
+      srcset={srcset(c.cover.url, c.cover.w)}
+      sizes="(min-width: 1152px) 560px, (min-width: 768px) 50vw, 100vw"
+      width={c.cover.w}
+      height={c.cover.h}
+      alt=""
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      class="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+    />
+  </div>
+  <div class="space-y-1 p-4">
+    <p class="text-xs text-font2">{t(locale, "collections.photoCount", { n: c.photos.length })}</p>
+    <Heading class="text-2xl font-bold" lang={titleLangOf(c, locale)}>
+      <a href={`${ROUTES.collections[locale]}${c.slug}/`} class="after:absolute after:inset-0 hover:text-accent">
+        {titleOf(c, locale)}
+      </a>
+    </Heading>
+    {intro && <p class="line-clamp-2 text-sm text-font2" lang={introLangOf(c, locale)}>{intro}</p>}
+  </div>
+</article>

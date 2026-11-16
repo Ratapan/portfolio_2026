@@ -5,6 +5,7 @@ import ArticleBody from "../components/article/ArticleBody.astro";
 import { ROUTES, t } from "../i18n";
 import { formatDate, type PostData } from "../lib/posts";
 import { cfImage, srcset } from "../lib/img";
+import { articleJsonLd } from "../lib/seo";
 
 interface Props {
   post: PostData;
@@ -30,6 +31,7 @@ const ns = kind === "articles" ? "article" : "projects";
   image={cfImage(cover.url, 1600)}
   preloadImage={{ src: cfImage(cover.url, 960), srcset: srcset(cover.url, cover.w), sizes: coverSizes }}
   article={{ publishedAt: post.publishedAt, updatedAt: post.updatedAt }}
+  jsonLd={articleJsonLd(post, kind)}
 >
   <article class="px-4 py-8">
     <header class="mx-auto mb-8 max-w-[680px] space-y-3 text-center">

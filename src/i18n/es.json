@@ -45,7 +45,8 @@
       "rolePhoto": "Fotógrafo",
       "bio": "Ingeniero Informático construyendo soluciones web, desplegando en la nube y capturando el mundo con una cámara — desde Santiago, Chile.",
       "ctaPortfolio": "Ver Portafolio",
-      "ctaAbout": "Sobre mí"
+      "ctaAbout": "Sobre mí",
+      "ctaCommissions": "Encargos"
     },
     "slidersEyebrow": "Destacados",
     "slidersTitle": "Últimos Posts",
@@ -55,7 +56,12 @@
     "readMore": "Leer más",
     "untitled": "Sin título",
     "featured": "Destacadas",
-    "featuredSubtitle": "Una selección del portafolio."
+    "featuredSubtitle": "Una selección del portafolio.",
+    "cta": {
+      "title": "¿Tienes algo en mente?",
+      "text": "Eventos, conciertos, retratos o un proyecto propio: cuéntame qué necesitas y conversemos.",
+      "button": "Escríbeme"
+    }
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -285,5 +291,39 @@
     "photoCount": "{n} fotos",
     "back": "Todas las colecciones",
     "metaDescription": "Colecciones fotográficas de Javier Sabando: ensayos y series curadas."
+  },
+  "commissions": {
+    "title": "Encargos",
+    "metaDescription": "Encarga una sesión de fotos a Javier Sabando en Santiago de Chile.",
+    "intro": "¿Necesitas fotos para un evento, un concierto, retratos o tu proyecto? Cuéntame qué tienes en mente y te respondo por correo.",
+    "direct": "¿Prefieres el correo? Escríbeme a",
+    "privacy": "Uso tus datos solo para responderte.",
+    "name": "Nombre",
+    "email": "Correo",
+    "type": "Tipo de sesión",
+    "typePlaceholder": "Elige una opción",
+    "types": {
+      "retrato": "Retrato",
+      "evento": "Evento",
+      "concierto": "Concierto o banda",
+      "producto": "Producto",
+      "otro": "Otro"
+    },
+    "date": "Fecha tentativa",
+    "optional": "opcional",
+    "message": "Mensaje",
+    "messageHint": "Lugar, duración, cuántas fotos necesitas, referencias…",
+    "submit": "Enviar",
+    "sending": "Enviando…",
+    "successTitle": "¡Mensaje enviado!",
+    "successText": "Gracias por escribir. Te respondo pronto por correo.",
+    "another": "Enviar otro mensaje",
+    "noscript": "El formulario necesita JavaScript para la verificación anti-spam. Si lo tienes desactivado, escríbeme directo a",
+    "errors": {
+      "invalid": "Revisa los campos: falta algo o no tiene el formato correcto.",
+      "captcha": "No se pudo verificar que no eres un robot. Inténtalo de nuevo.",
+      "send": "No se pudo enviar el mensaje. Inténtalo más tarde o escríbeme directo.",
+      "network": "Sin conexión con el servidor. Revisa tu internet e inténtalo de nuevo."
+    }
   }
 }

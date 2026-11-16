@@ -45,7 +45,8 @@
       "rolePhoto": "Photographer",
       "bio": "Software engineer building web solutions, deploying to the cloud, and capturing the world through a lens — from Santiago, Chile.",
       "ctaPortfolio": "View Portfolio",
-      "ctaAbout": "About me"
+      "ctaAbout": "About me",
+      "ctaCommissions": "Commissions"
     },
     "slidersEyebrow": "Highlights",
     "slidersTitle": "Latest Posts",
@@ -55,7 +56,12 @@
     "readMore": "Read more",
     "untitled": "Untitled",
     "featured": "Featured",
-    "featuredSubtitle": "A selection from the portfolio."
+    "featuredSubtitle": "A selection from the portfolio.",
+    "cta": {
+      "title": "Have something in mind?",
+      "text": "Events, concerts, portraits or a project of your own: tell me what you need and let's talk.",
+      "button": "Get in touch"
+    }
   },
   "notFound": {
     "title": "Page not found",
@@ -285,5 +291,39 @@
     "photoCount": "{n} photos",
     "back": "All collections",
     "metaDescription": "Photo collections by Javier Sabando: curated essays and series."
+  },
+  "commissions": {
+    "title": "Commissions",
+    "metaDescription": "Book a photo session with Javier Sabando in Santiago, Chile.",
+    "intro": "Need photos for an event, a concert, portraits or your project? Tell me what you have in mind and I'll get back to you by email.",
+    "direct": "Prefer email? Write to me at",
+    "privacy": "I only use your details to reply to you.",
+    "name": "Name",
+    "email": "Email",
+    "type": "Session type",
+    "typePlaceholder": "Choose one",
+    "types": {
+      "retrato": "Portrait",
+      "evento": "Event",
+      "concierto": "Concert or band",
+      "producto": "Product",
+      "otro": "Other"
+    },
+    "date": "Tentative date",
+    "optional": "optional",
+    "message": "Message",
+    "messageHint": "Place, duration, how many photos you need, references…",
+    "submit": "Send",
+    "sending": "Sending…",
+    "successTitle": "Message sent!",
+    "successText": "Thanks for writing. I'll get back to you soon by email.",
+    "another": "Send another message",
+    "noscript": "The form needs JavaScript for spam protection. If it's disabled, write to me directly at",
+    "errors": {
+      "invalid": "Check the fields: something is missing or has the wrong format.",
+      "captcha": "We couldn't verify you're not a robot. Please try again.",
+      "send": "The message couldn't be sent. Try again later or email me directly.",
+      "network": "Couldn't reach the server. Check your connection and try again."
+    }
   }
 }

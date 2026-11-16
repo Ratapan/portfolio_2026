@@ -23,9 +23,11 @@ interface Props {
   single?: boolean;
   /** og:type "article" + fecha de publicación. */
   article?: { publishedAt: Date; updatedAt: Date };
+  /** Datos estructurados (ver src/lib/seo.ts). */
+  jsonLd?: object;
 }
 
-const { locale, route, path = "", title, description, image, preloadImage, single = false, article } =
+const { locale, route, path = "", title, description, image, preloadImage, single = false, article, jsonLd } =
   Astro.props;
 const siteName = t(locale, "meta.siteName");
 const fullTitle = title ? `${title} · ${siteName}` : `${siteName} · Javier Sabando`;
@@ -37,6 +39,10 @@ const alternates = (single ? [locale] : (["es", "en"] as const)).map((l) => ({
   href: new URL(ROUTES[route][l] + path, site).href,
 }));
 const rssUrl = new URL("/rss.xml", site).href;
+// "<" escapado: el JSON va dentro de un <script> y no debe poder cerrarlo.
+const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, "\\u003c") : undefined;
+// Cloudflare Web Analytics (sin cookies). El token es público; sin él, no se carga.
+const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN as string | undefined;
 ---
 
 <!doctype html>
@@ -86,6 +92,17 @@ const rssUrl = new URL("/rss.xml", site).href;
     <meta property="og:locale" content={locale === "es" ? "es_CL" : "en_US"} />
     {image && <meta property="og:image" content={image} />}
     <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+    {jsonLdText && <script type="application/ld+json" set:html={jsonLdText} />}
+    {
+      beaconToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: beaconToken })}
+        />
+      )
+    }
   </head>
   <body class="flex min-h-dvh flex-col bg-back1 text-font1 antialiased">
     <a

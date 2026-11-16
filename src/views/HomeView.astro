@@ -1,11 +1,18 @@
 ---
-// Home provisoria de la fase 2: presentación + destacadas. La home definitiva
-// (colecciones, artículos, proyectos, CTA a encargos) llega en la fase 6.
+// Home: foto destacada a pantalla completa, una selección del portafolio (con
+// visor), las últimas colecciones y artículos, los proyectos si hay y una
+// invitación a encargos. Las secciones sin contenido no se muestran.
 import Base from "../layouts/Base.astro";
-import Photo from "../components/Photo.astro";
+import ArticleBody from "../components/article/ArticleBody.astro";
+import CollectionCard from "../components/CollectionCard.astro";
+import PostCard from "../components/article/PostCard.astro";
 import { ROUTES, t, type Locale } from "../i18n";
-import { getFeatured, isLandscape } from "../lib/photos";
+import { altFor, getFeatured, isLandscape } from "../lib/photos";
+import { galleryPhotos } from "../lib/gallery";
+import { getCuratedCollections } from "../lib/collections";
+import { getArticles, getProjects } from "../lib/posts";
 import { cfImage, srcset } from "../lib/img";
+import { personJsonLd } from "../lib/seo";
 
 interface Props {
   locale: Locale;
@@ -15,53 +22,161 @@ const { locale } = Astro.props;
 const featured = await getFeatured();
 // Hero: la mejor foto horizontal (si no hay, la mejor a secas).
 const hero = featured.find(isLandscape) ?? featured[0];
-const grid = featured.filter((p) => p !== hero).slice(0, 9);
-const heroSizes = "(min-width: 1152px) 640px, (min-width: 768px) 55vw, 100vw";
+// Selección: las 9 mejores del portafolio después del hero.
+const picks = (await galleryPhotos())
+  .filter((p) => p.pf && p.id !== hero?.id)
+  .sort((a, b) => a.best - b.best)
+  .slice(0, 9);
+const collections = (await getCuratedCollections()).slice(0, 2);
+const articles = (await getArticles()).slice(0, 3);
+const projects = (await getProjects()).slice(0, 3);
+// Artículos y proyectos existen solo en español (badge "ES" en /en/).
+const postHref = (kind: "articles" | "projects", slug: string) => `${ROUTES[kind].es}${slug}/`;
 ---
 
 <Base
   locale={locale}
   route="home"
   image={hero ? cfImage(hero.url, 1600) : undefined}
-  preloadImage={hero ? { src: cfImage(hero.url, 960), srcset: srcset(hero.url, hero.width), sizes: heroSizes } : undefined}
+  preloadImage={hero ? { src: cfImage(hero.url, 1600), srcset: srcset(hero.url, hero.width), sizes: "100vw" } : undefined}
+  jsonLd={personJsonLd(locale)}
 >
-  <div class="mx-auto max-w-6xl space-y-16 px-4 py-8">
-    <section class="grid items-center gap-8 md:grid-cols-[1fr_1.2fr]">
-      <div class="space-y-4">
-        <p class="text-font2">{t(locale, "home.hero.greeting")}</p>
-        <h1 class="text-4xl font-bold sm:text-5xl">Javier Sabando</h1>
-        <p class="flex flex-wrap gap-2 text-sm">
-          <span class="rounded-full bg-surface px-3 py-1">{t(locale, "home.hero.rolePhoto")}</span>
-          <span class="rounded-full bg-surface px-3 py-1">{t(locale, "home.hero.roleDev")}</span>
-        </p>
-        <p class="max-w-prose leading-relaxed text-font2">{t(locale, "home.hero.bio")}</p>
-        <div class="flex flex-wrap gap-3">
-          <a href={ROUTES.portfolio[locale]} class="btn btn-accent">{t(locale, "home.hero.ctaPortfolio")}</a>
-          <a href={ROUTES.about[locale]} class="btn">{t(locale, "home.hero.ctaAbout")} →</a>
-        </div>
+  <section
+    class="relative isolate flex h-[70svh] min-h-[440px] items-end overflow-hidden bg-black md:h-[calc(100svh-4.5rem)] md:max-h-[980px]"
+  >
+    {
+      hero && (
+        <img
+          src={cfImage(hero.url, 1600)}
+          srcset={srcset(hero.url, hero.width)}
+          sizes="100vw"
+          width={hero.width}
+          height={hero.height}
+          alt={altFor(hero, locale)}
+          fetchpriority="high"
+          decoding="sync"
+          class="absolute inset-0 -z-10 size-full object-cover"
+          style={hero.color ? `background-color:${hero.color}` : undefined}
+        />
+      )
+    }
+    <div class="absolute inset-0 -z-10 bg-linear-to-t from-black/80 via-black/25 to-transparent" aria-hidden="true">
+    </div>
+    <div class="mx-auto w-full max-w-6xl space-y-4 px-4 pb-10 text-white md:pb-16">
+      <p class="text-white/80">{t(locale, "home.hero.greeting")}</p>
+      <h1 class="font-serif text-5xl leading-none font-bold tracking-tight sm:text-6xl md:text-7xl">Javier Sabando</h1>
+      <p class="flex flex-wrap gap-2 text-sm">
+        <span class="rounded-full bg-white/15 px-3 py-1 backdrop-blur-sm">{t(locale, "home.hero.rolePhoto")}</span>
+        <span class="rounded-full bg-white/15 px-3 py-1 backdrop-blur-sm">{t(locale, "home.hero.roleDev")}</span>
+      </p>
+      <div class="flex flex-wrap gap-3 pt-2">
+        <a href={ROUTES.portfolio[locale]} class="btn btn-accent">{t(locale, "home.hero.ctaPortfolio")}</a>
+        <a
+          href={ROUTES.commissions[locale]}
+          class="inline-flex items-center rounded-lg border border-white/50 px-4 py-2 text-white transition-colors hover:bg-white hover:text-black"
+        >
+          {t(locale, "home.hero.ctaCommissions")}
+        </a>
       </div>
-      {hero && <Photo photo={hero} locale={locale} sizes={heroSizes} priority class="w-full rounded-2xl" />}
+    </div>
+  </section>
+
+  <div class="space-y-20 pt-14 pb-8">
+    <section class="mx-auto max-w-3xl space-y-4 px-4 text-center">
+      <p class="text-lg leading-relaxed text-font2 md:text-xl">{t(locale, "home.hero.bio")}</p>
+      <p><a href={ROUTES.about[locale]} class="link">{t(locale, "home.hero.ctaAbout")} →</a></p>
     </section>
 
     {
-      grid.length > 0 && (
-        <section>
-          <header class="mb-6">
-            <h2 class="text-2xl font-bold">{t(locale, "home.featured")}</h2>
-            <p class="text-font2">{t(locale, "home.featuredSubtitle")}</p>
+      picks.length > 0 && (
+        <section class="mx-auto max-w-6xl px-4" aria-labelledby="home-featured">
+          <header class="mx-auto mb-6 flex max-w-5xl flex-wrap items-end justify-between gap-x-6 gap-y-1">
+            <div>
+              <h2 id="home-featured" class="text-2xl font-bold md:text-3xl">{t(locale, "home.featured")}</h2>
+              <p class="text-font2">{t(locale, "home.featuredSubtitle")}</p>
+            </div>
+            <a href={ROUTES.portfolio[locale]} class="link text-sm">{t(locale, "portfolio.allPortfolio")} →</a>
           </header>
-          <div class="columns-2 gap-3 md:columns-3 [&>*]:mb-3">
-            {grid.map((photo) => (
-              <Photo
-                photo={photo}
+          <ArticleBody blocks={[{ type: "slide", photos: picks }]} locale={locale} />
+        </section>
+      )
+    }
+
+    {
+      collections.length > 0 && (
+        <section class="mx-auto max-w-6xl px-4" aria-labelledby="home-collections">
+          <header class="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
+            <div>
+              <h2 id="home-collections" class="text-2xl font-bold md:text-3xl">{t(locale, "collections.listTitle")}</h2>
+              <p class="text-font2">{t(locale, "collections.listSubtitle")}</p>
+            </div>
+            <a href={ROUTES.collections[locale]} class="link text-sm">{t(locale, "collections.back")} →</a>
+          </header>
+          <div class="grid gap-6 md:grid-cols-2">
+            {collections.map((c) => (
+              <CollectionCard collection={c} locale={locale} heading="h3" />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      articles.length > 0 && (
+        <section class="mx-auto max-w-6xl px-4" aria-labelledby="home-articles">
+          <header class="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
+            <div>
+              <h2 id="home-articles" class="text-2xl font-bold md:text-3xl">{t(locale, "article.listTitle")}</h2>
+              <p class="text-font2">{t(locale, "article.listSubtitle")}</p>
+            </div>
+            <a href={ROUTES.articles[locale]} class="link text-sm">{t(locale, "article.back")} →</a>
+          </header>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {articles.map((post) => (
+              <PostCard
+                post={post}
+                href={postHref("articles", post.slug)}
                 locale={locale}
-                sizes="(min-width: 1152px) 370px, (min-width: 768px) 32vw, 48vw"
-                class="w-full break-inside-avoid rounded-lg"
+                spanishBadge={locale === "en"}
+                heading="h3"
               />
             ))}
           </div>
         </section>
       )
     }
+
+    {
+      projects.length > 0 && (
+        <section class="mx-auto max-w-6xl px-4" aria-labelledby="home-projects">
+          <header class="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
+            <div>
+              <h2 id="home-projects" class="text-2xl font-bold md:text-3xl">{t(locale, "projects.listTitle")}</h2>
+              <p class="text-font2">{t(locale, "projects.listSubtitle")}</p>
+            </div>
+            <a href={ROUTES.projects[locale]} class="link text-sm">{t(locale, "projects.back")} →</a>
+          </header>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((post) => (
+              <PostCard
+                post={post}
+                href={postHref("projects", post.slug)}
+                locale={locale}
+                spanishBadge={locale === "en"}
+                heading="h3"
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="mx-auto max-w-6xl px-4" aria-labelledby="home-cta">
+      <div class="space-y-4 rounded-2xl bg-surface px-6 py-12 text-center md:py-16">
+        <h2 id="home-cta" class="text-3xl font-bold">{t(locale, "home.cta.title")}</h2>
+        <p class="mx-auto max-w-xl text-font2">{t(locale, "home.cta.text")}</p>
+        <a href={ROUTES.commissions[locale]} class="btn btn-accent">{t(locale, "home.cta.button")}</a>
+      </div>
+    </section>
   </div>
 </Base>

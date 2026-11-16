@@ -62,7 +62,7 @@ export const NAV: { route: RouteName; ready: boolean; accent?: boolean }[] = [
   // Se muestra solo si hay proyectos publicados (ver Header.astro).
   { route: "projects", ready: true },
   { route: "about", ready: true },
-  { route: "commissions", ready: false, accent: true },
+  { route: "commissions", ready: true, accent: true },
 ];
 
 export function otherLocale(locale: Locale): Locale {

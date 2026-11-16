@@ -11,9 +11,11 @@ interface Props {
   /** Listado en inglés de contenido que solo existe en español. */
   spanishBadge?: boolean;
   priority?: boolean;
+  /** Etiqueta del título: h2 en los listados, h3 dentro de una sección de la home. */
+  heading?: "h2" | "h3";
 }
 
-const { post, href, locale, spanishBadge = false, priority = false } = Astro.props;
+const { post, href, locale, spanishBadge = false, priority = false, heading: Heading = "h2" } = Astro.props;
 const cover = post.cover;
 ---
 
@@ -43,11 +45,11 @@ const cover = post.cover;
         )
       }
     </p>
-    <h2 class="text-xl leading-snug font-bold">
+    <Heading class="text-xl leading-snug font-bold">
       <a href={href} hreflang={spanishBadge ? "es" : undefined} class="after:absolute after:inset-0 hover:text-accent">
         {post.title}
       </a>
-    </h2>
+    </Heading>
     <p class="line-clamp-3 text-sm text-font2">{post.excerpt}</p>
     {
       post.technologies.length > 0 && (

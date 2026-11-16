@@ -1,0 +1,221 @@
+---
+// Encargos: formulario con Turnstile que envía a la función api/encargos.ts.
+// Con JS se envía con fetch y el resultado se muestra sin recargar; sin JS el
+// envío nativo vuelve a esta página con ?enviado=1 o ?error=… (Turnstile igual
+// necesita JS, así que sin JS se ofrece el correo directo).
+import Base from "../layouts/Base.astro";
+import Photo from "../components/Photo.astro";
+import { ROUTES, raw, t, type Locale } from "../i18n";
+import { getFeatured, isLandscape } from "../lib/photos";
+import { COMMISSIONS_EMAIL, COMMISSIONS_ENDPOINT, ERROR_CODES, LIMITS, SESSION_TYPES } from "../lib/commissions";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+// Clave pública del widget. Sin configurar, la de pruebas de Cloudflare (siempre
+// pasa, pero la función la rechaza con el secret real): sirve solo en local.
+const siteKey = (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) || "1x00000000000000000000AA";
+if (!import.meta.env.PUBLIC_TURNSTILE_SITE_KEY) {
+  console.warn("[encargos] PUBLIC_TURNSTILE_SITE_KEY no está definida: se usa la clave de pruebas de Turnstile.");
+}
+// Una foto vertical del portafolio acompaña el texto (en pantallas anchas).
+const photo = (await getFeatured()).find((p) => !isLandscape(p) && p.width);
+const messages = {
+  ...Object.fromEntries(ERROR_CODES.map((code) => [code, t(locale, `commissions.errors.${code}`)])),
+  submit: t(locale, "commissions.submit"),
+  sending: t(locale, "commissions.sending"),
+};
+const types = raw(locale, "commissions.types") as Record<string, string>;
+const input =
+  "w-full rounded-lg border border-line bg-back1 px-3 py-2 text-font1 placeholder:text-font2/60 focus:border-accent focus:outline-none";
+---
+
+<Base
+  locale={locale}
+  route="commissions"
+  title={t(locale, "commissions.title")}
+  description={t(locale, "commissions.metaDescription")}
+>
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-8 md:grid-cols-[1fr_1.15fr] md:py-14">
+    <div class="space-y-5">
+      <h1 class="text-3xl font-bold md:text-5xl">{t(locale, "commissions.title")}</h1>
+      <p class="text-lg leading-relaxed text-font2">{t(locale, "commissions.intro")}</p>
+      <p class="text-font2">
+        {t(locale, "commissions.direct")}{" "}
+        <a href={`mailto:${COMMISSIONS_EMAIL}`} class="link font-medium">{COMMISSIONS_EMAIL}</a>.
+      </p>
+      {
+        photo && (
+          <Photo
+            photo={photo}
+            locale={locale}
+            sizes="(min-width: 1152px) 420px, 40vw"
+            class="hidden max-h-[60vh] w-auto rounded-xl md:block"
+          />
+        )
+      }
+    </div>
+
+    <div>
+      <noscript>
+        <p class="mb-4 rounded-lg bg-surface p-4 text-sm">
+          {t(locale, "commissions.noscript")}{" "}
+          <a href={`mailto:${COMMISSIONS_EMAIL}`} class="link">{COMMISSIONS_EMAIL}</a>.
+        </p>
+      </noscript>
+
+      <div id="commission-success" class="space-y-3 rounded-2xl bg-surface p-6 text-center md:p-8" hidden>
+        <h2 class="text-2xl font-bold" tabindex="-1">{t(locale, "commissions.successTitle")}</h2>
+        <p class="text-font2">{t(locale, "commissions.successText")}</p>
+        <p><a href={ROUTES.commissions[locale]} class="link text-sm" data-commission-reset>{t(locale, "commissions.another")}</a></p>
+      </div>
+
+      <form
+        id="commission-form"
+        method="post"
+        action={COMMISSIONS_ENDPOINT}
+        class="space-y-5 rounded-2xl bg-surface p-6 md:p-8"
+        data-messages={JSON.stringify(messages)}
+      >
+        <input type="hidden" name="lang" value={locale} />
+        <div class="grid gap-5 sm:grid-cols-2">
+          <label class="block space-y-1.5">
+            <span class="text-sm font-medium">{t(locale, "commissions.name")}</span>
+            <input name="name" required maxlength={LIMITS.name} autocomplete="name" class={input} />
+          </label>
+          <label class="block space-y-1.5">
+            <span class="text-sm font-medium">{t(locale, "commissions.email")}</span>
+            <input type="email" name="email" required maxlength={LIMITS.email} autocomplete="email" class={input} />
+          </label>
+          <label class="block space-y-1.5">
+            <span class="text-sm font-medium">{t(locale, "commissions.type")}</span>
+            <select name="type" required class={input}>
+              <option value="" disabled selected>{t(locale, "commissions.typePlaceholder")}</option>
+              {SESSION_TYPES.map((type) => <option value={type}>{types[type]}</option>)}
+            </select>
+          </label>
+          <label class="block space-y-1.5">
+            <span class="text-sm font-medium">
+              {t(locale, "commissions.date")}{" "}
+              <span class="font-normal text-font2">({t(locale, "commissions.optional")})</span>
+            </span>
+            <input type="date" name="date" class={input} />
+          </label>
+        </div>
+        <label class="block space-y-1.5">
+          <span class="text-sm font-medium">{t(locale, "commissions.message")}</span>
+          <textarea
+            name="message"
+            required
+            minlength={LIMITS.messageMin}
+            maxlength={LIMITS.messageMax}
+            rows="6"
+            placeholder={t(locale, "commissions.messageHint")}
+            class={input}></textarea>
+        </label>
+
+        <!-- Honeypot: invisible para personas; si llega con texto, es un bot. -->
+        <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+          <label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <div id="turnstile" data-sitekey={siteKey} data-language={locale} class="min-h-[65px]"></div>
+
+        <p id="commission-status" role="alert" class="text-sm text-accent empty:hidden"></p>
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p class="text-xs text-font2">{t(locale, "commissions.privacy")}</p>
+          <button type="submit" class="btn btn-accent cursor-pointer disabled:cursor-wait disabled:opacity-70">
+            {t(locale, "commissions.submit")}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</Base>
+
+<!-- Turnstile en modo explícito: así el widget toma el tema del sitio (clase .light). -->
+<script is:inline>
+  window.onTurnstileLoad = function () {
+    var box = document.getElementById("turnstile");
+    if (!box || !window.turnstile) return;
+    window.turnstile.render(box, {
+      sitekey: box.dataset.sitekey,
+      language: box.dataset.language,
+      theme: document.documentElement.classList.contains("light") ? "light" : "dark",
+      size: "flexible",
+    });
+  };
+</script>
+<script
+  is:inline
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad"
+  async
+  defer></script>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("#commission-form");
+  const success = document.querySelector<HTMLElement>("#commission-success");
+  const status = document.querySelector<HTMLElement>("#commission-status");
+  type TurnstileApi = { reset: (el?: string | HTMLElement) => void };
+
+  if (form && success && status) {
+    const messages = JSON.parse(form.dataset.messages ?? "{}") as Record<string, string>;
+    const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+    const resetCaptcha = () => (window as unknown as { turnstile?: TurnstileApi }).turnstile?.reset("#turnstile");
+
+    const showSuccess = () => {
+      form.hidden = true;
+      success.hidden = false;
+      success.querySelector<HTMLElement>("h2")?.focus();
+    };
+
+    // Vuelta de un envío nativo (sin fetch): ?enviado=1 o ?error=código.
+    const params = new URLSearchParams(location.search);
+    if (params.has("enviado")) showSuccess();
+    const returned = params.get("error");
+    if (returned) status.textContent = messages[returned] ?? messages.send;
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (button.disabled) return;
+      button.disabled = true;
+      button.textContent = messages.sending;
+      status.textContent = "";
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+        if (res.ok && data.ok) {
+          form.reset();
+          showSuccess();
+          return;
+        }
+        status.textContent = messages[data.error ?? "send"] ?? messages.send;
+      } catch {
+        status.textContent = messages.network;
+      }
+      // El token de Turnstile es de un solo uso: hay que pedir otro.
+      resetCaptcha();
+      button.disabled = false;
+      button.textContent = messages.submit;
+    });
+
+    success.querySelector("[data-commission-reset]")?.addEventListener("click", (event) => {
+      event.preventDefault();
+      history.replaceState(null, "", location.pathname);
+      success.hidden = true;
+      form.hidden = false;
+      status.textContent = "";
+      resetCaptcha();
+      button.disabled = false;
+      button.textContent = messages.submit;
+      form.querySelector<HTMLInputElement>("input[name=name]")?.focus();
+    });
+  }
+</script>

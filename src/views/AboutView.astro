@@ -8,6 +8,7 @@ import GearStats from "../components/about/GearStats.astro";
 import { raw, t, type Locale } from "../i18n";
 import { getPhotos } from "../lib/photos";
 import { gearStats } from "../lib/gear";
+import { SOCIALS, personJsonLd } from "../lib/seo";
 
 interface Props {
   locale: Locale;
@@ -31,12 +32,7 @@ const portrait = { src: "https://assets.javiersabando.lat/blog/images/yo.avif", 
 const portraitSizes = "(min-width: 768px) 560px, 100vw";
 
 const iconBase = "https://assets.javiersabando.lat/coffeIcons";
-const socials = [
-  { name: "LinkedIn", href: "https://www.linkedin.com/in/javier-sabando/", icon: "linkedin.svg" },
-  { name: "GitHub", href: "https://github.com/Ratapan", icon: "github.svg" },
-  { name: "Instagram", href: "https://www.instagram.com/ratapics", icon: "ig.svg" },
-  { name: "YouTube", href: "https://www.youtube.com/@rtpdev", icon: "youtube.svg" },
-];
+const socials = SOCIALS;
 ---
 
 <Base
@@ -46,6 +42,7 @@ const socials = [
   description={t(locale, "meta.aboutDescription")}
   image={portrait.src}
   preloadImage={{ src: portrait.src }}
+  jsonLd={personJsonLd(locale)}
 >
   <div class="mx-auto max-w-6xl space-y-14 px-4 py-8">
     <header class="text-center">

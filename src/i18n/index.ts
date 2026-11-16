@@ -56,7 +56,8 @@ export type RouteName = keyof typeof ROUTES;
  */
 export const NAV: { route: RouteName; ready: boolean; accent?: boolean }[] = [
   { route: "portfolio", ready: true },
-  { route: "collections", ready: false },
+  // Se muestra solo si hay colecciones publicadas (ver Header.astro).
+  { route: "collections", ready: true },
   { route: "articles", ready: true },
   // Se muestra solo si hay proyectos publicados (ver Header.astro).
   { route: "projects", ready: true },

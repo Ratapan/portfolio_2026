@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths } from "astro";
+import CollectionView from "../../../views/CollectionView.astro";
+import { getCuratedCollections, type CollectionData } from "../../../lib/collections";
+
+export const getStaticPaths = (async () =>
+  (await getCuratedCollections()).map((collection) => ({
+    params: { slug: collection.slug },
+    props: { collection },
+  }))) satisfies GetStaticPaths;
+
+const { collection } = Astro.props as { collection: CollectionData };
+---
+
+<CollectionView collection={collection} locale="en" />

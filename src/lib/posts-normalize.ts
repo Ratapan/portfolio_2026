@@ -108,6 +108,10 @@ export function rawToPhoto(doc: Record<string, unknown>, cameraName: (raw?: stri
     t: 0,
     best: 0,
   };
+  const series = doc.series as { id?: unknown; order?: unknown } | null | undefined;
+  if (series && typeof series.id === "string" && typeof series.order === "number") {
+    photo.series = { id: series.id, order: series.order };
+  }
   return Object.fromEntries(Object.entries(photo).filter(([, v]) => v !== undefined)) as unknown as GPhoto;
 }
 

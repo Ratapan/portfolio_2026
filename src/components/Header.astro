@@ -1,6 +1,7 @@
 ---
 import { NAV, ROUTES, t, type Locale, type RouteName } from "../i18n";
 import { getProjects } from "../lib/posts";
+import { getCuratedCollections } from "../lib/collections";
 
 interface Props {
   locale: Locale;
@@ -8,10 +9,12 @@ interface Props {
 }
 
 const { locale, current } = Astro.props;
-// Sin proyectos publicados, la sección no aparece en el menú (la página
-// existe igual, con su estado vacío).
-const hasProjects = (await getProjects()).length > 0;
-const items = NAV.filter((item) => item.ready && (item.route !== "projects" || hasProjects));
+// Sin proyectos o colecciones publicadas, esa sección no aparece en el menú
+// (la página existe igual, con su estado vacío).
+const empty = new Set<RouteName>();
+if (!(await getProjects()).length) empty.add("projects");
+if (!(await getCuratedCollections()).length) empty.add("collections");
+const items = NAV.filter((item) => item.ready && !empty.has(item.route));
 ---
 
 <header class="border-b border-line/60">

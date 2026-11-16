@@ -1,0 +1,64 @@
+---
+// Listado de colecciones curadas (bilingüe: títulos e intros en es/en).
+import Base from "../layouts/Base.astro";
+import { ROUTES, t, type Locale } from "../i18n";
+import { getCuratedCollections, introOf, titleOf } from "../lib/collections";
+import { cfImage, srcset } from "../lib/img";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const collections = await getCuratedCollections();
+---
+
+<Base
+  locale={locale}
+  route="collections"
+  title={t(locale, "collections.listTitle")}
+  description={t(locale, "collections.metaDescription")}
+  image={collections[0] ? cfImage(collections[0].cover.url, 1600) : undefined}
+>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <header class="mb-8 space-y-2 text-center">
+      <h1 class="text-3xl font-bold md:text-4xl">{t(locale, "collections.listTitle")}</h1>
+      <p class="text-font2">{t(locale, "collections.listSubtitle")}</p>
+    </header>
+
+    {
+      collections.length === 0 ? (
+        <p class="py-20 text-center text-font2">{t(locale, "collections.empty")}</p>
+      ) : (
+        <div class="grid gap-6 md:grid-cols-2">
+          {collections.map((c, i) => (
+            <article class="group relative overflow-hidden rounded-xl bg-surface">
+              <div class="aspect-[3/2] overflow-hidden" style={c.cover.c ? `background-color:${c.cover.c}` : undefined}>
+                <img
+                  src={cfImage(c.cover.url, 960)}
+                  srcset={srcset(c.cover.url, c.cover.w)}
+                  sizes="(min-width: 768px) 560px, 100vw"
+                  width={c.cover.w}
+                  height={c.cover.h}
+                  alt=""
+                  loading={i < 2 ? "eager" : "lazy"}
+                  decoding="async"
+                  class="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              </div>
+              <div class="space-y-1 p-4">
+                <p class="text-xs text-font2">{t(locale, "collections.photoCount", { n: c.photos.length })}</p>
+                <h2 class="text-2xl font-bold">
+                  <a href={`${ROUTES.collections[locale]}${c.slug}/`} class="after:absolute after:inset-0 hover:text-accent">
+                    {titleOf(c, locale)}
+                  </a>
+                </h2>
+                {introOf(c, locale)[0] && <p class="line-clamp-2 text-sm text-font2">{introOf(c, locale)[0]}</p>}
+              </div>
+            </article>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Base>

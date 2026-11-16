@@ -277,5 +277,13 @@
     "demo": "Demo",
     "technologies": "Tecnologías",
     "metaDescription": "Proyectos de software de Javier Sabando."
+  },
+  "collections": {
+    "listTitle": "Colecciones",
+    "listSubtitle": "Ensayos fotográficos: series de fotos con una historia en común.",
+    "empty": "Aún no hay colecciones publicadas.",
+    "photoCount": "{n} fotos",
+    "back": "Todas las colecciones",
+    "metaDescription": "Colecciones fotográficas de Javier Sabando: ensayos y series curadas."
   }
 }

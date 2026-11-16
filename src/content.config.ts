@@ -12,6 +12,7 @@ import { z } from "astro/zod";
 import { dropNulls, withDb } from "./lib/mongo";
 import { barePhoto, normalizePost, rawToPhoto, referencedUrls } from "./lib/posts-normalize";
 import { cameraName } from "./lib/gear";
+import { normalizeCollection } from "./lib/collections-normalize";
 
 const trimmed = z.string().trim();
 
@@ -161,9 +162,49 @@ function postsLoader(type: "blog" | "repo"): Loader {
   };
 }
 
+/**
+ * Colecciones curadas publicadas. A diferencia de los artículos, aquí solo
+ * entran fotos visible:true (contrato de insta_bot): una colección es una
+ * vitrina de la galería, no un texto que las cita.
+ */
+const curatedLoader: Loader = {
+  name: "mongo-collections",
+  async load({ store, logger }) {
+    const { docs, photos } = await withDb(async (db) => {
+      const docs = await db
+        .collection("collections")
+        .find({ published: true })
+        .sort({ order: 1, updatedAt: -1 })
+        .toArray();
+      const urls = [...new Set(docs.flatMap((d) => (Array.isArray(d.photos) ? d.photos : [])))];
+      const photos = urls.length
+        ? await db
+            .collection("images")
+            .find({ url: { $in: urls }, visible: true }, { projection: { originalKey: 0, stars: 0, __v: 0 } })
+            .toArray()
+        : [];
+      return { docs, photos };
+    });
+    const byUrl = new Map(photos.map((p) => [String(p.url), rawToPhoto(p, cameraName)]));
+    store.clear();
+    let skipped = 0;
+    for (const doc of docs) {
+      const data = normalizeCollection(doc, (url) => byUrl.get(url));
+      if (!data?.slug || !data.title) {
+        skipped++;
+        logger.warn(`colección ${String(doc.slug ?? doc._id)} omitida: sin fotos visibles, slug o título`);
+        continue;
+      }
+      store.set({ id: data.slug, data: data as unknown as Record<string, unknown> });
+    }
+    logger.info(`${docs.length - skipped} colecciones publicadas`);
+  },
+};
+
 export const collections = {
   photos: defineCollection({ loader: photosLoader, schema: photoSchema }),
   tags: defineCollection({ loader: tagsLoader, schema: tagSchema }),
   articles: defineCollection({ loader: postsLoader("blog") }),
   projects: defineCollection({ loader: postsLoader("repo") }),
+  curated: defineCollection({ loader: curatedLoader }),
 };

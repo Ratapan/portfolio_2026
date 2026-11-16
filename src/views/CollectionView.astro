@@ -1,0 +1,53 @@
+---
+// Una colección: título e intro, y las fotos como ensayo (una a una, anchas;
+// los dípticos/trípticos juntos en una fila). Reutiliza ArticleBody, así que
+// el visor y el resto del comportamiento son los mismos que en los artículos.
+import Base from "../layouts/Base.astro";
+import ArticleBody from "../components/article/ArticleBody.astro";
+import { ROUTES, t, type Locale } from "../i18n";
+import { introOf, titleOf, type CollectionData } from "../lib/collections";
+import type { PostBlock } from "../lib/posts";
+import { cfImage } from "../lib/img";
+
+interface Props {
+  collection: CollectionData;
+  locale: Locale;
+}
+
+const { collection, locale } = Astro.props;
+const title = titleOf(collection, locale);
+const intro = introOf(collection, locale);
+const blocks: PostBlock[] = collection.items.map((item) =>
+  item.type === "series"
+    ? { type: "slide", photos: item.photos }
+    : { type: "image", size: "ancho", photo: item.photo },
+);
+---
+
+<Base
+  locale={locale}
+  route="collections"
+  path={`${collection.slug}/`}
+  title={title}
+  description={intro[0] ?? t(locale, "collections.metaDescription")}
+  image={cfImage(collection.cover.url, 1600)}
+>
+  <article class="px-4 py-8">
+    <header class="mx-auto mb-10 max-w-[680px] space-y-3 text-center">
+      <p class="text-xs text-font2">
+        <a href={ROUTES.collections[locale]} class="link">← {t(locale, "collections.back")}</a>
+      </p>
+      <h1 class="text-3xl leading-tight font-bold md:text-5xl">{title}</h1>
+      <p class="text-sm text-font2">{t(locale, "collections.photoCount", { n: collection.photos.length })}</p>
+      {
+        intro.length > 0 && (
+          <div class="prose-rapics text-start text-font2">
+            {intro.map((p) => <p>{p}</p>)}
+          </div>
+        )
+      }
+    </header>
+
+    <ArticleBody blocks={blocks} locale={locale} />
+  </article>
+</Base>

@@ -32,6 +32,8 @@ export interface GPhoto {
   t: number;
   /** Puesto en "Mejores" (0 = la mejor). */
   best: number;
+  /** Díptico/tríptico (solo en colecciones; la galería no lo usa). */
+  series?: { id: string; order: number };
 }
 
 export interface FacetItem {

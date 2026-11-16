@@ -23,3 +23,10 @@ export const titleOf = (c: CollectionData, locale: Locale) => (locale === "en" ?
 /** Intro en el idioma pedido; si falta en inglés, la española. */
 export const introOf = (c: CollectionData, locale: Locale) =>
   locale === "en" && c.introEn.length ? c.introEn : c.intro;
+
+/** "es" cuando la página en inglés muestra el texto español por falta de
+ *  traducción, para marcarlo con `lang` (lectores de pantalla, buscadores). */
+export const titleLangOf = (c: CollectionData, locale: Locale) =>
+  locale === "en" && !c.titleEn ? "es" : undefined;
+export const introLangOf = (c: CollectionData, locale: Locale) =>
+  locale === "en" && !c.introEn.length && c.intro.length ? "es" : undefined;

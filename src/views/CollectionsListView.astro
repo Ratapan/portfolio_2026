@@ -2,7 +2,7 @@
 // Listado de colecciones curadas (bilingüe: títulos e intros en es/en).
 import Base from "../layouts/Base.astro";
 import { ROUTES, t, type Locale } from "../i18n";
-import { getCuratedCollections, introOf, titleOf } from "../lib/collections";
+import { getCuratedCollections, introLangOf, introOf, titleLangOf, titleOf } from "../lib/collections";
 import { cfImage, srcset } from "../lib/img";
 
 interface Props {
@@ -48,12 +48,16 @@ const collections = await getCuratedCollections();
               </div>
               <div class="space-y-1 p-4">
                 <p class="text-xs text-font2">{t(locale, "collections.photoCount", { n: c.photos.length })}</p>
-                <h2 class="text-2xl font-bold">
+                <h2 class="text-2xl font-bold" lang={titleLangOf(c, locale)}>
                   <a href={`${ROUTES.collections[locale]}${c.slug}/`} class="after:absolute after:inset-0 hover:text-accent">
                     {titleOf(c, locale)}
                   </a>
                 </h2>
-                {introOf(c, locale)[0] && <p class="line-clamp-2 text-sm text-font2">{introOf(c, locale)[0]}</p>}
+                {introOf(c, locale)[0] && (
+                  <p class="line-clamp-2 text-sm text-font2" lang={introLangOf(c, locale)}>
+                    {introOf(c, locale)[0]}
+                  </p>
+                )}
               </div>
             </article>
           ))}

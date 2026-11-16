@@ -5,7 +5,7 @@
 import Base from "../layouts/Base.astro";
 import ArticleBody from "../components/article/ArticleBody.astro";
 import { ROUTES, t, type Locale } from "../i18n";
-import { introOf, titleOf, type CollectionData } from "../lib/collections";
+import { introLangOf, introOf, titleLangOf, titleOf, type CollectionData } from "../lib/collections";
 import type { PostBlock } from "../lib/posts";
 import { cfImage } from "../lib/img";
 
@@ -37,11 +37,11 @@ const blocks: PostBlock[] = collection.items.map((item) =>
       <p class="text-xs text-font2">
         <a href={ROUTES.collections[locale]} class="link">← {t(locale, "collections.back")}</a>
       </p>
-      <h1 class="text-3xl leading-tight font-bold md:text-5xl">{title}</h1>
+      <h1 class="text-3xl leading-tight font-bold md:text-5xl" lang={titleLangOf(collection, locale)}>{title}</h1>
       <p class="text-sm text-font2">{t(locale, "collections.photoCount", { n: collection.photos.length })}</p>
       {
         intro.length > 0 && (
-          <div class="prose-rapics text-start text-font2">
+          <div class="prose-rapics text-start text-font2" lang={introLangOf(collection, locale)}>
             {intro.map((p) => <p>{p}</p>)}
           </div>
         )

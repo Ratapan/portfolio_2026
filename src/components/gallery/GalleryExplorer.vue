@@ -259,7 +259,7 @@ const field =
                 :aria-pressed="filters.categories.includes(c.value)"
                 @click="toggleCategory(c.value)"
               >
-                {{ c.value }} <span class="opacity-60">{{ c.count }}</span>
+                {{ c.value }} <span class="tabular-nums">{{ c.count }}</span>
               </button>
             </div>
           </details>

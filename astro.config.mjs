@@ -9,6 +9,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://javiersabando.lat",
   trailingSlash: "always",
+  // El CSS va dentro del HTML: es uno solo (~8 KiB comprimido) y así el primer
+  // render no espera otra petición (PageSpeed móvil: ~150 ms menos de FCP/LCP).
+  build: { inlineStylesheets: "always" },
   integrations: [
     vue(),
     // Los hreflang ya van en el <head> de cada página (los slugs cambian por

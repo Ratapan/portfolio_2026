@@ -12,8 +12,12 @@
 
 export const ASSETS_BASE = "https://assets.javiersabando.lat";
 
-/** Anchos del srcset. Los WebP publicados miden como máximo 2560 px. */
-export const WIDTHS = [480, 960, 1600, 2560] as const;
+/**
+ * Anchos del srcset. Los WebP publicados miden como máximo 2560 px.
+ * 720 cubre las fotos de 300–400 px CSS en móviles (DPR ~2), que si no
+ * bajaban la de 960: PageSpeed lo marcaba como 140–435 KiB de más por página.
+ */
+export const WIDTHS = [480, 720, 960, 1600, 2560] as const;
 
 // AVIF no se acepta como origen (error 9520), y SVG/GIF no tienen sentido.
 const TRANSFORMABLE = /\.(webp|jpe?g|png)$/i;

@@ -16,8 +16,14 @@ const { post, kind } = Astro.props;
 const locale = "es" as const;
 const cover = post.cover;
 // Una portada vertical queda limitada por el alto (80vh), no por el ancho.
+// El ancho va explícito en CSS con la misma fórmula del `sizes`: con `w-auto`
+// la caja mide 0 hasta que llega la imagen y el texto salta (CLS).
+const sized = !!(cover.w && cover.h);
 const ratio = cover.w && cover.h ? cover.w / cover.h : 1.5;
 const coverSizes = `min(1024px, calc(100vw - 32px), calc(80vh * ${ratio.toFixed(3)}))`;
+const coverStyle = [sized && `width:min(100%, calc(80vh * ${ratio.toFixed(3)}))`, cover.c && `background-color:${cover.c}`]
+  .filter(Boolean)
+  .join(";");
 const ns = kind === "articles" ? "article" : "projects";
 ---
 
@@ -71,11 +77,8 @@ const ns = kind === "articles" ? "article" : "projects";
         height={cover.h}
         alt=""
         fetchpriority="high"
-        class:list={[
-          "mx-auto block rounded-xl",
-          cover.w ? "h-auto max-h-[80vh] w-auto max-w-full" : "aspect-[3/2] w-full object-cover",
-        ]}
-        style={cover.c ? `background-color:${cover.c}` : undefined}
+        class:list={["mx-auto block rounded-xl", sized ? "h-auto max-w-full" : "aspect-[3/2] w-full object-cover"]}
+        style={coverStyle || undefined}
       />
     </figure>
 

@@ -11,6 +11,12 @@
 //   TURNSTILE_SECRET_KEY  secret del widget de Turnstile
 //   ENCARGOS_FROM         remitente verificado en Resend, p. ej. "Rapics <web@javiersabando.lat>"
 //   ENCARGOS_TO           destino; por defecto encargos@javiersabando.lat (Email Routing lo reenvía)
+//
+// Vercel revisa los tipos con su propia config (sin ES2022 ni tipos de Node),
+// así que este archivo declara los que usa: `process` y Object.hasOwn.
+// En runtime Node 22 tiene ambos; esto es solo para el chequeo.
+/// <reference types="node" />
+/// <reference lib="es2022.object" />
 
 const SESSION_TYPES: Record<string, string> = {
   retrato: "Retrato",

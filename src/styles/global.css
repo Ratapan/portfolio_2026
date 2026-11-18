@@ -150,14 +150,16 @@
     gap: 0.5rem;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
-    color: var(--color-font2);
+    /* font1, no font2: font2 sobre back2 da 3,96:1 en el tema oscuro (AA pide 4,5). */
+    color: var(--color-font1);
     background-color: var(--color-back2);
     transition:
       color 150ms,
       background-color 150ms;
   }
   .btn:hover {
-    color: var(--color-font1);
+    /* Como .btn-accent: font1 sobre accent daba 2,4:1 (oscuro) y 2,0:1 (claro). */
+    color: var(--color-back1);
     background-color: var(--color-accent);
   }
   .btn-accent {
